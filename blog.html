@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog | AvantService</title>
+    <link rel="stylesheet" href="services.css">
+    <style>
+        .blog-hero {
+            padding: 120px 20px 60px;
+            text-align: center;
+        }
+
+        .blog-hero .badge {
+            display: inline-block;
+            background: rgba(0, 240, 255, 0.1);
+            border: 1px solid rgba(0, 240, 255, 0.3);
+            color: var(--acc-cyan);
+            padding: 6px 18px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+
+        .blog-hero h1 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: bold;
+            margin-bottom: 16px;
+        }
+
+        .blog-hero h1 span {
+            color: var(--acc-cyan);
+        }
+
+        .blog-hero p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            max-width: 560px;
+            margin: 0 auto;
+        }
+
+        /* GRID DE ARTÍCULOS */
+        .blog-grid {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 40px 20px 80px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 28px;
+        }
+
+        .blog-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .blog-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(0, 240, 255, 0.25);
+        }
+
+        .blog-card-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .blog-card-img-placeholder {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, rgba(0, 87, 255, 0.2), rgba(0, 240, 255, 0.1));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+        }
+
+        .blog-card-body {
+            padding: 24px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .blog-card-meta {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .blog-card-category {
+            background: rgba(0, 240, 255, 0.1);
+            border: 1px solid rgba(0, 240, 255, 0.2);
+            color: var(--acc-cyan);
+            padding: 3px 12px;
+            border-radius: 12px;
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .blog-card-date {
+            color: var(--text-secondary);
+            font-size: 0.78rem;
+        }
+
+        .blog-card h2 {
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+
+        .blog-card p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.6;
+            flex: 1;
+        }
+
+        .blog-card-footer {
+            margin-top: 20px;
+        }
+
+        .blog-card-footer a {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--acc-cyan);
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: gap 0.2s;
+        }
+
+        .blog-card-footer a:hover {
+            gap: 10px;
+        }
+
+        /* ARTÍCULO DESTACADO */
+        .blog-featured {
+            max-width: 1100px;
+            margin: 0 auto 16px;
+            padding: 0 20px;
+        }
+
+        .blog-featured-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: 340px;
+            transition: border-color 0.2s;
+        }
+
+        .blog-featured-card:hover {
+            border-color: rgba(0, 240, 255, 0.25);
+        }
+
+        .blog-featured-img {
+            background: linear-gradient(135deg, rgba(0, 87, 255, 0.3), rgba(0, 240, 255, 0.15));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 5rem;
+        }
+
+        .blog-featured-body {
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .blog-featured-body .badge-featured {
+            display: inline-block;
+            background: rgba(0, 87, 255, 0.2);
+            border: 1px solid rgba(0, 87, 255, 0.4);
+            color: #60a5fa;
+            padding: 4px 14px;
+            border-radius: 12px;
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 16px;
+            width: fit-content;
+        }
+
+        .blog-featured-body h2 {
+            font-size: 1.6rem;
+            font-weight: bold;
+            margin-bottom: 14px;
+            line-height: 1.3;
+        }
+
+        .blog-featured-body p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.7;
+            margin-bottom: 24px;
+        }
+
+        .blog-featured-body a.cta-button {
+            width: fit-content;
+            padding: 10px 24px;
+            font-size: 0.85rem;
+        }
+
+        .section-label {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px 16px;
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        @media (max-width: 680px) {
+            .blog-featured-card {
+                grid-template-columns: 1fr;
+            }
+
+            .blog-featured-img {
+                height: 180px;
+            }
+
+            .blog-featured-body {
+                padding: 24px;
+            }
+
+            .blog-featured-body h2 {
+                font-size: 1.25rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="logo-group">
+        <img src="logo.svg" width="60px" alt="AvantService">
+        <h1>AVANTSERVICE</h1>
+    </div>
+    <nav>
+        <a href="index.html">Inicio</a>
+        <a href="index.html#services">Servicios</a>
+        <a href="blog.html">Blog</a>
+        <a href="index.html#contact">Contacto</a>
+    </nav>
+</header>
+
+<main>
+
+    <!-- HERO -->
+    <section class="blog-hero">
+        <span class="badge">Consejos & Noticias</span>
+        <h1>Blog de <span>AvantService</span></h1>
+        <p>Guías prácticas, consejos de mantenimiento y novedades del sector técnico.</p>
+    </section>
+
+    <!-- ARTÍCULO DESTACADO -->
+    <div class="blog-featured" id="blog-featured"></div>
+
+    <!-- GRID DE ARTÍCULOS -->
+    <p class="section-label">Artículos recientes</p>
+    <div class="blog-grid" id="blog-grid">
+        <div style="grid-column:1/-1; text-align:center; color:var(--text-secondary); padding:40px 0;">Cargando artículos…</div>
+    </div>
+</main>
+
+<footer style="text-align:center; padding: 32px 20px; color: var(--text-secondary); font-size: 0.85rem; border-top: 1px solid var(--glass-border);">
+    © 2026 AvantService · Todos los derechos reservados
+</footer>
+
+<script>
+const API = 'http://localhost/backendavant/get_blog.php';
+
+function formatFecha(fecha) {
+    const [y, m, d] = fecha.split('-');
+    const meses = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+    return `${parseInt(d)} ${meses[parseInt(m)-1]} ${y}`;
+}
+
+function renderFeatured(post) {
+    const el = document.getElementById('blog-featured');
+    if (!post) { el.style.display = 'none'; return; }
+    el.innerHTML = `
+        <div class="blog-featured-card">
+            <div class="blog-featured-img">${post.emoji}</div>
+            <div class="blog-featured-body">
+                <span class="badge-featured">⭐ Destacado</span>
+                <h2>${post.titulo}</h2>
+                <p>${post.resumen}</p>
+                <a href="articulo.html?slug=${post.slug}" class="cta-button">Leer artículo →</a>
+            </div>
+        </div>`;
+}
+
+function renderGrid(posts) {
+    const grid = document.getElementById('blog-grid');
+    if (!posts.length) {
+        grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:var(--text-secondary);padding:40px 0;">No hay artículos publicados aún.</div>';
+        return;
+    }
+    grid.innerHTML = posts.map(p => `
+        <article class="blog-card">
+            <div class="blog-card-img-placeholder">${p.emoji}</div>
+            <div class="blog-card-body">
+                <div class="blog-card-meta">
+                    <span class="blog-card-category">${p.categoria}</span>
+                    <span class="blog-card-date">${formatFecha(p.fecha)}</span>
+                </div>
+                <h2>${p.titulo}</h2>
+                <p>${p.resumen}</p>
+                <div class="blog-card-footer">
+                    <a href="articulo.html?slug=${p.slug}">Leer más →</a>
+                </div>
+            </div>
+        </article>`).join('');
+}
+
+fetch(API)
+    .then(r => r.json())
+    .then(posts => {
+        const destacado = posts.find(p => p.destacado === '1' || p.destacado === 1) || null;
+        renderFeatured(destacado);
+        renderGrid(posts);
+    })
+    .catch(() => {
+        document.getElementById('blog-grid').innerHTML =
+            '<div style="grid-column:1/-1;text-align:center;color:#f87171;padding:40px 0;">No se pudo conectar con el servidor. Comprueba que WampServer está activo.</div>';
+    });
+</script>
+<script src="tracker.js"></script>
+</body>
+</html>

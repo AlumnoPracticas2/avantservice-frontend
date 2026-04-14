@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Artículo | AvantService</title>
+    <link rel="stylesheet" href="services.css">
+    <style>
+        .article-wrap {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 120px 24px 80px;
+        }
+
+        .article-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.85rem;
+            margin-bottom: 32px;
+            transition: color 0.2s;
+        }
+
+        .article-back:hover { color: var(--acc-cyan); }
+
+        .article-meta {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 20px;
+        }
+
+        .article-category {
+            background: rgba(0, 240, 255, 0.1);
+            border: 1px solid rgba(0, 240, 255, 0.2);
+            color: var(--acc-cyan);
+            padding: 3px 14px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .article-date {
+            color: var(--text-secondary);
+            font-size: 0.82rem;
+        }
+
+        .article-emoji {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .article-wrap h1 {
+            font-size: clamp(1.6rem, 4vw, 2.4rem);
+            font-weight: bold;
+            margin-bottom: 16px;
+            line-height: 1.25;
+        }
+
+        .article-resumen {
+            color: var(--text-secondary);
+            font-size: 1.05rem;
+            line-height: 1.7;
+            margin-bottom: 36px;
+            padding-bottom: 36px;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .article-content {
+            color: var(--text-primary);
+            font-size: 1rem;
+            line-height: 1.85;
+        }
+
+        .article-content p { margin-bottom: 18px; }
+
+        .article-content ul {
+            margin: 0 0 18px 20px;
+        }
+
+        .article-content li {
+            margin-bottom: 10px;
+            color: var(--text-secondary);
+        }
+
+        .article-content strong { color: var(--text-primary); }
+
+        .article-cta {
+            margin-top: 48px;
+            padding: 28px 32px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            text-align: center;
+        }
+
+        .article-cta p {
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="logo-group">
+        <img src="logo.svg" width="60px" alt="AvantService">
+        <h1>AVANTSERVICE</h1>
+    </div>
+    <nav>
+        <a href="index.html">Inicio</a>
+        <a href="index.html#services">Servicios</a>
+        <a href="blog.html">Blog</a>
+        <a href="index.html#contact">Contacto</a>
+    </nav>
+</header>
+
+<main>
+    <div class="article-wrap" id="article-wrap">
+        <div style="text-align:center;padding:60px 0;color:var(--text-secondary);">Cargando…</div>
+    </div>
+</main>
+
+<footer style="text-align:center; padding: 32px 20px; color: var(--text-secondary); font-size: 0.85rem; border-top: 1px solid var(--glass-border);">
+    © 2026 AvantService · Todos los derechos reservados
+</footer>
+
+<script>
+const API = 'http://localhost/backendavant/get_blog.php';
+
+function formatFecha(fecha) {
+    const [y, m, d] = fecha.split('-');
+    const meses = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+    return `${parseInt(d)} ${meses[parseInt(m)-1]} ${y}`;
+}
+
+const slug = new URLSearchParams(location.search).get('slug');
+const wrap = document.getElementById('article-wrap');
+
+if (!slug) {
+    wrap.innerHTML = '<p style="color:#f87171">Artículo no encontrado.</p>';
+} else {
+    fetch(`${API}?slug=${encodeURIComponent(slug)}`)
+        .then(r => r.json())
+        .then(post => {
+            if (post.error) throw new Error(post.error);
+            document.title = `${post.titulo} | AvantService`;
+            wrap.innerHTML = `
+                <a href="blog.html" class="article-back">← Volver al blog</a>
+                <div class="article-meta">
+                    <span class="article-category">${post.categoria}</span>
+                    <span class="article-date">${formatFecha(post.fecha)}</span>
+                </div>
+                <span class="article-emoji">${post.emoji}</span>
+                <h1>${post.titulo}</h1>
+                <p class="article-resumen">${post.resumen}</p>
+                <div class="article-content">${post.contenido}</div>
+                <div class="article-cta">
+                    <p>¿Necesitas ayuda con una avería? Contacta con nuestros técnicos.</p>
+                    <a href="index.html#contact" class="cta-button">Solicitar servicio</a>
+                </div>`;
+        })
+        .catch(() => {
+            wrap.innerHTML = '<p style="color:#f87171;text-align:center;padding:60px 0;">No se pudo cargar el artículo. Comprueba que WampServer está activo.</p>';
+        });
+}
+</script>
+<script src="tracker.js"></script>
+</body>
+</html>

@@ -1,0 +1,89 @@
+document.getElementById('contactForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    // Obtener todos los campos
+    const formData = {
+        nombre: document.getElementById('nombre').value,
+        apellido: document.getElementById('apellido').value,
+        correo: document.getElementById('correo').value,
+        telefono: document.getElementById('telefono').value,
+        producto: document.getElementById('producto').value,
+        problema: document.getElementById('problema').value,
+        mensaje: document.getElementById('mensaje').value,
+        origen: document.getElementById('origen').value
+    };
+
+    const panel = document.getElementById('confirmationPanel');
+    const dataDiv = document.getElementById('submittedData');
+    const submitBtn = this.querySelector('button[type="submit"]');
+
+    // Deshabilitar botón mientras se envía
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Enviando...';
+
+    // Limpiar clases previas del panel
+    panel.className = 'confirmation-panel';
+
+    // Intentar enviar al servidor PHP (MySQL)
+    fetch('guardar_contacto.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+    })
+    .then((response) => response.json())
+    .then((data) => {
+        if (data.success) {
+            panel.classList.add('success');
+            dataDiv.innerHTML = `
+                <h3>✅ ¡Mensaje Enviado!</h3>
+                <p>Hola <strong>${formData.nombre}</strong>, hemos recibido tu consulta sobre <strong>${formData.producto}</strong>.</p>
+                <p>Nos pondremos en contacto contigo en breve al correo <em>${formData.correo}</em>.</p>
+            `;
+            document.getElementById('contactForm').reset();
+        } else {
+            panel.classList.add('error');
+            dataDiv.innerHTML = `
+                <h3>⚠️ Error al enviar</h3>
+                <p>${data.error || 'Hubo un problema al procesar los datos.'}</p>
+            `;
+        }
+        panel.style.display = 'block';
+    })
+    .catch((error) => {
+        panel.classList.add('error');
+        dataDiv.innerHTML = `
+            <h3>❌ Error de Conexión</h3>
+            <p>No se pudo conectar con el servidor. Verifica que WAMP esté ejecutándose.</p>
+        `;
+        panel.style.display = 'block';
+    })
+    .finally(() => {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'ENVIAR A AVANTSTORE';
+        
+        // Ocultar el panel después de 8 segundos si fue exitoso
+        if (panel.classList.contains('success')) {
+            setTimeout(() => {
+                panel.style.display = 'none';
+            }, 8000);
+        }
+    });
+});
+
+// Funcionalidad para las tarjetas de servicios (Acordeón)
+document.addEventListener('DOMContentLoaded', () => {
+    const services = document.querySelectorAll('.service');
+    
+    services.forEach(service => {
+        service.addEventListener('click', () => {
+            // Opcional: Cerrar otras tarjetas si se desea comportamiento de acordeón
+            // services.forEach(s => {
+            //     if (s !== service) s.classList.remove('active');
+            // });
+            
+            service.classList.toggle('active');
+        });
+    });
+});
