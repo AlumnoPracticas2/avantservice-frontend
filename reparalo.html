@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AvantFix — AvantService</title>
+    <link rel="stylesheet" href="services.css">
+    <style>
+        .diy-page {
+            max-width: 780px;
+            margin: 0 auto;
+            padding: 60px 20px 80px;
+        }
+
+        .diy-page-title {
+            font-size: 2.2rem;
+            font-weight: bold;
+            color: #fff;
+            margin-bottom: 8px;
+        }
+
+        .diy-page-title span { color: var(--acc-cyan); text-shadow: 0 0 15px rgba(0,240,255,0.4); }
+
+        .diy-page-subtitle {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            margin-bottom: 40px;
+        }
+
+        .diy-diff-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 28px;
+        }
+        @media (max-width: 600px) { .diy-diff-grid { grid-template-columns: 1fr; } }
+
+        .diy-diff-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            padding: 20px 14px;
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            background: transparent;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+        .diy-diff-btn:hover { border-color: rgba(0,240,255,0.3); color: var(--text-primary); }
+        .diy-diff-btn.active {
+            border-color: var(--acc-cyan);
+            background: rgba(0,240,255,0.06);
+            color: var(--text-primary);
+        }
+        .diy-diff-icon  { font-size: 1.8rem; }
+        .diy-diff-title { font-size: 1rem; font-weight: 700; }
+        .diy-diff-desc  { font-size: 0.78rem; line-height: 1.45; opacity: 0.75; }
+
+        .diy-level-panel { display: none; }
+        .diy-level-panel.active { display: block; }
+
+        .diy-verdict {
+            border-radius: 10px;
+            padding: 14px 18px;
+            font-size: 0.88rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        .diy-verdict-ok     { background: rgba(16,185,129,0.08); border: 1px solid rgba(16,185,129,0.2); color: #6ee7b7; }
+        .diy-verdict-warn   { background: rgba(245,158,11,0.08); border: 1px solid rgba(245,158,11,0.2); color: #fcd34d; }
+        .diy-verdict-danger { background: rgba(244,63,94,0.08);  border: 1px solid rgba(244,63,94,0.25); color: #fda4af; }
+
+        .diy-tarifa {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            padding: 14px 18px;
+            margin-bottom: 24px;
+            font-size: 0.88rem;
+        }
+        .diy-tarifa-label { color: var(--text-secondary); }
+        .diy-tarifa-price { font-weight: 700; font-size: 1.05rem; color: var(--acc-cyan); }
+
+        .diy-terms {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            line-height: 1.65;
+            overflow: hidden;
+        }
+        .diy-terms-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 18px;
+            cursor: pointer;
+            user-select: none;
+            transition: background 0.2s;
+        }
+        .diy-terms-header:hover { background: rgba(255,255,255,0.04); }
+        .diy-terms-header strong { color: #e2e8f0; }
+        .diy-terms-arrow {
+            transition: transform 0.3s;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+        .diy-terms.open .diy-terms-arrow { transform: rotate(180deg); }
+        .diy-terms-body {
+            padding: 0 18px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.35s ease, padding 0.3s;
+        }
+        .diy-terms.open .diy-terms-body {
+            max-height: 600px;
+            padding: 0 18px 16px;
+        }
+        .diy-terms p { margin-bottom: 8px; }
+        .diy-terms p:last-child { margin-bottom: 0; }
+
+        .diy-accept {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 20px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+        }
+        .diy-accept input[type="checkbox"] {
+            margin-top: 2px;
+            accent-color: var(--acc-cyan);
+            width: 16px; height: 16px;
+            flex-shrink: 0;
+            cursor: pointer;
+        }
+
+        .diy-fields { margin-bottom: 20px; display: flex; flex-direction: column; gap: 14px; }
+        .diy-fields label { font-size: 0.9rem; font-weight: 600; color: var(--text-primary); margin-bottom: 6px; display: block; }
+        .diy-fields input,
+        .diy-fields textarea {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(0,0,0,0.2);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 10px;
+            color: #fff;
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.2s;
+            resize: vertical;
+        }
+        .diy-fields input:focus,
+        .diy-fields textarea:focus { border-color: var(--acc-cyan); }
+
+        .diy-send-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 32px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--acc-blue), var(--acc-cyan));
+            color: #fff;
+            font-weight: 600;
+            font-size: 0.95rem;
+            border: none;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        .diy-send-btn:hover { opacity: 0.85; }
+        .diy-send-btn[aria-disabled="true"] { opacity: 0.35; pointer-events: none; }
+
+        .confirm-banner {
+            display: none;
+            gap: 14px;
+            align-items: flex-start;
+            margin-top: 20px;
+            padding: 18px 20px;
+            border-radius: 12px;
+            background: rgba(16,185,129,0.07);
+            border: 1px solid rgba(16,185,129,0.3);
+        }
+        .confirm-banner.visible { display: flex; }
+        .confirm-banner-icon  { font-size: 1.5rem; flex-shrink: 0; }
+        .confirm-banner-title { font-weight: 700; color: #6ee7b7; font-size: 0.95rem; }
+        .confirm-banner-text  { color: var(--text-secondary); font-size: 0.83rem; line-height: 1.55; display: block; margin-top: 4px; }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="logo-group">
+        <img src="logo.svg" width="60px" alt="AvantService">
+        <h1>AvantService</h1>
+    </div>
+    <nav>
+        <a href="index.html">Inicio</a>
+        <a href="index.html#services">Servicios</a>
+        <a href="blog.html">Blog</a>
+        <a href="index.html#contact">Contacto</a>
+    </nav>
+</header>
+
+<div class="diy-page">
+
+    <h1 class="diy-page-title"><span>Avant</span>Fix</h1>
+    <p class="diy-page-subtitle">Selecciona el nivel de dificultad de tu problema y te orientamos. Puedes enviarnos tu consulta directamente desde aquí.</p>
+
+
+    <div class="diy-diff-grid">
+        <button class="diy-diff-btn active" data-diff="facil">
+            <span class="diy-diff-icon">🟢</span>
+            <span class="diy-diff-title">Fácil</span>
+            <span class="diy-diff-desc">Puedo intentar resolverlo yo mismo con instrucciones.</span>
+        </button>
+        <button class="diy-diff-btn" data-diff="medio">
+            <span class="diy-diff-icon">🟡</span>
+            <span class="diy-diff-title">Medio</span>
+            <span class="diy-diff-desc">Necesito orientación técnica más detallada.</span>
+        </button>
+        <button class="diy-diff-btn" data-diff="dificil">
+            <span class="diy-diff-icon">🔴</span>
+            <span class="diy-diff-title">Difícil</span>
+            <span class="diy-diff-desc">El problema parece grave o no sé por dónde empezar.</span>
+        </button>
+    </div>
+
+    <div id="diy-level-facil" class="diy-level-panel active">
+        <div class="diy-verdict diy-verdict-ok">
+            ✅ Este tipo de problema suele resolverse siguiendo unos pasos básicos. Un técnico te guiará por escrito.
+        </div>
+        <div class="diy-tarifa">
+            <span class="diy-tarifa-label">Tarifa orientación básica (por email)</span>
+            <span class="diy-tarifa-price">Gratuito</span>
+        </div>
+    </div>
+
+    <div id="diy-level-medio" class="diy-level-panel">
+        <div class="diy-verdict diy-verdict-warn">
+            🛠️ Este problema puede requerir orientación técnica detallada. Un técnico te asesorará paso a paso.
+        </div>
+        <div class="diy-tarifa">
+            <span class="diy-tarifa-label">Tarifa asesoramiento técnico (por email)</span>
+            <span class="diy-tarifa-price">15 €</span>
+        </div>
+    </div>
+
+    <div id="diy-level-dificil" class="diy-level-panel">
+        <div class="diy-verdict diy-verdict-danger">
+            ⚠️ <strong>Reparación recomendada exclusivamente para profesionales.</strong> Este nivel de avería implica riesgos eléctricos, mecánicos o de seguridad que requieren la intervención de un técnico cualificado. No intentes realizarla por tu cuenta: podrías agravar el daño, anular la garantía o poner en riesgo tu seguridad.
+        </div>
+        <div class="diy-tarifa">
+            <span class="diy-tarifa-label">Tarifa visita técnica a domicilio</span>
+            <span class="diy-tarifa-price">Desde 40 €</span>
+        </div>
+    </div>
+
+    <div class="diy-terms" id="diy-terms">
+        <div class="diy-terms-header" onclick="document.getElementById('diy-terms').classList.toggle('open')">
+            <strong>Condiciones del servicio — Aviso legal</strong>
+            <span class="diy-terms-arrow">▼</span>
+        </div>
+        <div class="diy-terms-body">
+            <p><strong style="color:#e2e8f0;">Carácter del servicio</strong> — El servicio de orientación técnica ofrecido por AvantService tiene carácter exclusivamente informativo y de asesoramiento. Las indicaciones proporcionadas no sustituyen en ningún caso la intervención de un profesional cualificado.</p>
+            <p><strong style="color:#e2e8f0;">Limitación de responsabilidad</strong> — AvantService no asume ninguna responsabilidad por daños materiales, averías adicionales, lesiones personales o pérdidas económicas que pudieran derivarse de la actuación del usuario sobre el producto, con independencia del nivel de dificultad seleccionado. El usuario actúa siempre bajo su propia responsabilidad.</p>
+            <p><strong style="color:#e2e8f0;">Reparaciones de nivel Difícil</strong> — Las reparaciones clasificadas como nivel <strong style="color:#fda4af;">Difícil</strong> están recomendadas exclusivamente para técnicos o profesionales del sector. AvantService desaconseja expresamente su realización por parte de usuarios sin formación específica, pudiendo implicar riesgos eléctricos, mecánicos o de seguridad, así como la anulación de la garantía del fabricante.</p>
+            <p><strong style="color:#e2e8f0;">Cobertura y tarifas</strong> — AvantService no cubre fallos preexistentes del producto ni daños ocasionados por un uso indebido. La tarifa indicada corresponde únicamente al servicio de asesoramiento o visita técnica, y no incluye piezas, materiales ni trabajos adicionales no presupuestados.</p>
+            <p><strong style="color:#e2e8f0;">Requisito de edad</strong> — El uso de este servicio está reservado a personas mayores de 18 años. Al enviar una consulta, el usuario declara ser mayor de edad o contar con el consentimiento expreso de su tutor legal. AvantService se reserva el derecho de cancelar cualquier solicitud cuando existan indicios razonables de que el usuario es menor de edad sin la supervisión de un adulto responsable.</p>
+            <p>Para más información consulta el <a href="legal.html" style="color:var(--acc-cyan);text-decoration:underline;">Aviso Legal completo</a>.</p>
+        </div>
+    </div>
+
+    <div class="diy-fields">
+        <div>
+            <label>Tu correo electrónico</label>
+            <input type="email" id="diy-email" placeholder="ejemplo@correo.com">
+        </div>
+        <div>
+            <label>Descripción del problema y producto/servicio</label>
+            <textarea id="diy-mensaje" rows="4" placeholder="Explícanos brevemente qué le ocurre..."></textarea>
+        </div>
+    </div>
+
+    <label class="diy-accept">
+        <input type="checkbox" id="diy-terms-check">
+        He leído y acepto las condiciones del servicio. Declaro ser mayor de 18 años o contar con el consentimiento de mi tutor legal. Soy consciente de que AvantService no asume responsabilidad por daños, fallos del producto o riesgos derivados de mi actuación, y que las reparaciones de nivel Difícil están recomendadas para profesionales.
+    </label>
+
+    <button id="diy-send-btn" class="diy-send-btn" aria-disabled="true">
+        ✉️ Enviar consulta a AvantService
+    </button>
+
+    <div id="diy-confirm" class="confirm-banner">
+        <span class="confirm-banner-icon">✅</span>
+        <div>
+            <span class="confirm-banner-title">¡Consulta enviada!</span>
+            <span class="confirm-banner-text">Hemos recibido tu mensaje. Nos pondremos en contacto contigo en un plazo máximo de <strong>48 horas laborables</strong>.</span>
+        </div>
+    </div>
+
+</div>
+
+<script>
+var activeDiff = 'facil';
+var checkbox   = document.getElementById('diy-terms-check');
+var sendBtn    = document.getElementById('diy-send-btn');
+
+document.querySelectorAll('.diy-diff-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+        activeDiff = this.dataset.diff;
+        document.querySelectorAll('.diy-diff-btn').forEach(function(b) { b.classList.remove('active'); });
+        document.querySelectorAll('.diy-level-panel').forEach(function(p) { p.classList.remove('active'); });
+        this.classList.add('active');
+        document.getElementById('diy-level-' + activeDiff).classList.add('active');
+        document.getElementById('diy-confirm').classList.remove('visible');
+    });
+});
+
+checkbox.addEventListener('change', function() {
+    sendBtn.setAttribute('aria-disabled', this.checked ? 'false' : 'true');
+});
+
+sendBtn.addEventListener('click', function() {
+    if (this.getAttribute('aria-disabled') === 'true') return;
+    var email   = document.getElementById('diy-email').value.trim();
+    var mensaje = document.getElementById('diy-mensaje').value.trim();
+    if (!email)   { alert('Por favor, introduce tu correo electrónico.'); return; }
+    if (!mensaje) { alert('Por favor, describe brevemente el problema.'); return; }
+
+    sendBtn.setAttribute('aria-disabled', 'true');
+    sendBtn.textContent = 'Enviando…';
+
+    fetch('http://localhost/backendavant/api.php?r=diy', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nivel: activeDiff, email: email, mensaje: mensaje })
+    })
+    .then(function(res) { return res.json(); })
+    .then(function(data) {
+        if (data.success) {
+            window.location.href = 'success.html';
+        } else {
+            throw new Error(data.error || 'Error desconocido');
+        }
+    })
+    .catch(function(err) {
+        sendBtn.setAttribute('aria-disabled', 'false');
+        sendBtn.textContent = '✉️ Enviar consulta a AvantService';
+        alert('Error al enviar: ' + err.message);
+    });
+});
+</script>
+
+</body>
+</html>

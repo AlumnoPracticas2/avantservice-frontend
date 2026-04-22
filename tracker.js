@@ -1,7 +1,7 @@
 ;(function () {
   'use strict';
 
-  var TRACK_URL = 'http://localhost/backendavant/track.php';
+  var TRACK_URL = 'http://localhost/backendavant/api.php?r=track';
 
   // ── IDs ────────────────────────────────────────────────────────────────────
 

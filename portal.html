@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tu presupuesto — AvantService</title>
+    <link rel="stylesheet" href="services.css">
+    <style>
+        .portal-page {
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 60px 20px 80px;
+        }
+
+        .portal-title {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #fff;
+            margin-bottom: 6px;
+        }
+        .portal-title span { color: var(--acc-cyan); text-shadow: 0 0 15px rgba(0,240,255,0.4); }
+
+        .portal-subtitle {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 36px;
+        }
+
+        .portal-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .portal-card-header {
+            padding: 18px 24px;
+            border-bottom: 1px solid var(--glass-border);
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--acc-cyan);
+            font-weight: 600;
+        }
+
+        .portal-card-body { padding: 24px; }
+
+        .presupuesto-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+        .presupuesto-table td { padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .presupuesto-table td:last-child { text-align: right; font-weight: 600; color: #e2e8f0; }
+        .presupuesto-table tr:last-child td { border-bottom: none; }
+        .presupuesto-label { color: var(--text-secondary); }
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 24px;
+            background: rgba(0,240,255,0.04);
+            border-top: 1px solid rgba(0,240,255,0.15);
+        }
+        .total-label { color: var(--text-secondary); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.06em; }
+        .total-price { font-size: 1.6rem; font-weight: 800; color: var(--acc-cyan); }
+
+        .notas-box {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            padding: 14px 18px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.65;
+            margin-bottom: 20px;
+        }
+
+        .action-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .btn-aceptar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 16px;
+            border-radius: 12px;
+            background: rgba(16,185,129,0.1);
+            border: 1px solid rgba(16,185,129,0.3);
+            color: #6ee7b7;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-aceptar:hover { background: rgba(16,185,129,0.18); border-color: rgba(16,185,129,0.5); }
+
+        .btn-rechazar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 16px;
+            border-radius: 12px;
+            background: rgba(244,63,94,0.08);
+            border: 1px solid rgba(244,63,94,0.25);
+            color: #fda4af;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-rechazar:hover { background: rgba(244,63,94,0.15); border-color: rgba(244,63,94,0.45); }
+
+        .btn-aceptar:disabled,
+        .btn-rechazar:disabled { opacity: 0.4; pointer-events: none; }
+
+        .estado-banner {
+            border-radius: 12px;
+            padding: 20px 24px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        .estado-aceptado { background: rgba(16,185,129,0.08); border: 1px solid rgba(16,185,129,0.25); color: #6ee7b7; }
+        .estado-rechazado { background: rgba(244,63,94,0.08); border: 1px solid rgba(244,63,94,0.25); color: #fda4af; }
+        .estado-icon { font-size: 1.6rem; }
+
+        /* SECCIÓN EXPANDIDA — solo visible si aceptado */
+        .avantfix-expand {
+            display: none;
+            border: 1px solid rgba(0,240,255,0.2);
+            border-radius: 16px;
+            overflow: hidden;
+            margin-top: 28px;
+        }
+        .avantfix-expand.visible { display: block; }
+
+        .avantfix-header {
+            background: linear-gradient(135deg, rgba(0,87,255,0.2), rgba(0,240,255,0.08));
+            padding: 20px 24px;
+            border-bottom: 1px solid rgba(0,240,255,0.15);
+        }
+        .avantfix-header h3 { margin: 0; font-size: 1.1rem; font-weight: 700; color: #fff; }
+        .avantfix-header h3 span { color: var(--acc-cyan); }
+        .avantfix-header p { margin: 6px 0 0; font-size: 0.85rem; color: var(--text-secondary); }
+
+        .avantfix-steps {
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .step {
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+        }
+        .step-num {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(0,240,255,0.1);
+            border: 1px solid rgba(0,240,255,0.3);
+            color: var(--acc-cyan);
+            font-weight: 700;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .step-body { flex: 1; }
+        .step-title { font-weight: 600; font-size: 0.9rem; color: #e2e8f0; margin-bottom: 2px; }
+        .step-desc { font-size: 0.82rem; color: var(--text-secondary); line-height: 1.55; }
+
+        .loading-state { text-align: center; padding: 80px 20px; color: var(--text-secondary); }
+        .error-state { text-align: center; padding: 80px 20px; color: #fda4af; }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="logo-group">
+        <img src="logo.svg" width="60px" alt="AvantService">
+        <h1>AvantService</h1>
+    </div>
+    <nav>
+        <a href="index.html">Inicio</a>
+        <a href="index.html#services">Servicios</a>
+        <a href="blog.html">Blog</a>
+        <a href="index.html#contact">Contacto</a>
+    </nav>
+</header>
+
+<div class="portal-page" id="portal-root">
+    <div class="loading-state">Cargando tu presupuesto…</div>
+</div>
+
+<script>
+(function () {
+    var token = new URLSearchParams(window.location.search).get('token');
+    var root  = document.getElementById('portal-root');
+
+    if (!token) {
+        root.innerHTML = '<div class="error-state">Enlace inválido. No se encontró ningún presupuesto.</div>';
+        return;
+    }
+
+    fetch('http://localhost/backendavant/api.php?r=presupuesto&token=' + encodeURIComponent(token))
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+            if (data.error) { root.innerHTML = '<div class="error-state">' + data.error + '</div>'; return; }
+            render(data);
+        })
+        .catch(function() {
+            root.innerHTML = '<div class="error-state">No se pudo conectar con el servidor.</div>';
+        });
+
+    function fmt(n) { return parseFloat(n).toFixed(2).replace('.', ',') + ' €'; }
+
+    function render(data) {
+        var lineasHtml = (data.lineas || []).filter(function(l) { return l.descripcion; }).map(function(l) {
+            return '<tr><td class="presupuesto-label">' + esc(l.descripcion) + '</td><td>' +
+                (l.precio ? fmt(l.precio) : 'A consultar') + '</td></tr>';
+        }).join('');
+
+        var notasHtml = data.notas
+            ? '<div class="notas-box"><strong style="color:#e2e8f0;font-size:0.78rem;text-transform:uppercase;letter-spacing:0.06em;">Observaciones</strong><br><br>' + esc(data.notas) + '</div>'
+            : '';
+
+        var mensajeHtml = data.mensaje
+            ? '<p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.65;margin-bottom:20px;">' + esc(data.mensaje) + '</p>'
+            : '';
+
+        var estadoBanner = '';
+        if (data.estado === 'aceptado') {
+            estadoBanner = '<div class="estado-banner estado-aceptado"><span class="estado-icon">✅</span><span>Has aceptado este presupuesto. Nos pondremos en contacto contigo para coordinar la reparación.</span></div>';
+        } else if (data.estado === 'rechazado') {
+            estadoBanner = '<div class="estado-banner estado-rechazado"><span class="estado-icon">✖</span><span>Has rechazado este presupuesto. Si cambias de opinión, contáctanos.</span></div>';
+        }
+
+        var botonesHtml = data.estado === 'pendiente'
+            ? '<div class="action-grid"><button class="btn-aceptar" id="btn-aceptar">✅ Aceptar presupuesto</button><button class="btn-rechazar" id="btn-rechazar">✖ Rechazar</button></div>'
+            : '';
+
+        root.innerHTML =
+            '<h1 class="portal-title"><span>Avant</span>Fix · Tu presupuesto</h1>' +
+            '<p class="portal-subtitle">Hola, ' + esc(data.nombre || data.email) + '. Revisa el presupuesto y responde cuando quieras.</p>' +
+            estadoBanner +
+            '<div class="portal-card">' +
+                '<div class="portal-card-header">Desglose del presupuesto</div>' +
+                '<div class="portal-card-body">' +
+                    mensajeHtml +
+                    '<table class="presupuesto-table">' + lineasHtml + '</table>' +
+                '</div>' +
+                '<div class="total-row">' +
+                    '<span class="total-label">Total estimado (IVA inc.)</span>' +
+                    '<span class="total-price">' + fmt(data.total) + '</span>' +
+                '</div>' +
+            '</div>' +
+            notasHtml +
+            botonesHtml +
+            '<div id="avantfix-expand" class="avantfix-expand' + (data.estado === 'aceptado' ? ' visible' : '') + '">' +
+                '<div class="avantfix-header">' +
+                    '<h3><span>Avant</span>Fix · Reparación en marcha</h3>' +
+                    '<p>Has aceptado el presupuesto. A continuación te explicamos cómo será el proceso.</p>' +
+                '</div>' +
+                '<div class="avantfix-steps">' +
+                    '<div class="step"><div class="step-num">1</div><div class="step-body"><div class="step-title">Confirmación recibida</div><div class="step-desc">Hemos registrado tu aceptación. Nuestro equipo técnico ya tiene conocimiento de ello.</div></div></div>' +
+                    '<div class="step"><div class="step-num">2</div><div class="step-body"><div class="step-title">Recogida o entrega del dispositivo</div><div class="step-desc">Un técnico se pondrá en contacto contigo en las próximas 24 h para coordinar la entrega o recogida del dispositivo.</div></div></div>' +
+                    '<div class="step"><div class="step-num">3</div><div class="step-body"><div class="step-title">Reparación</div><div class="step-desc">Realizaremos la reparación con los materiales indicados en el presupuesto. Te avisaremos cuando esté lista.</div></div></div>' +
+                    '<div class="step"><div class="step-num">4</div><div class="step-body"><div class="step-title">Entrega y pago</div><div class="step-desc">Una vez finalizada la reparación, te entregamos el dispositivo y se realiza el pago según lo acordado.</div></div></div>' +
+                '</div>' +
+            '</div>';
+
+        if (data.estado === 'pendiente') {
+            document.getElementById('btn-aceptar').addEventListener('click', function() { responder('aceptado'); });
+            document.getElementById('btn-rechazar').addEventListener('click', function() { responder('rechazado'); });
+        }
+    }
+
+    function responder(accion) {
+        var btnA = document.getElementById('btn-aceptar');
+        var btnR = document.getElementById('btn-rechazar');
+        if (btnA) btnA.disabled = true;
+        if (btnR) btnR.disabled = true;
+
+        fetch('http://localhost/backendavant/api.php?r=presupuesto/aceptar', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ token: token, accion: accion })
+        })
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+            if (data.success) {
+                // Recargar para mostrar el estado actualizado
+                window.location.reload();
+            } else {
+                alert(data.message || 'Error al procesar la respuesta.');
+                if (btnA) btnA.disabled = false;
+                if (btnR) btnR.disabled = false;
+            }
+        })
+        .catch(function() {
+            alert('No se pudo conectar con el servidor.');
+            if (btnA) btnA.disabled = false;
+            if (btnR) btnR.disabled = false;
+        });
+    }
+
+    function esc(str) {
+        return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    }
+})();
+</script>
+
+</body>
+</html>
