@@ -1105,6 +1105,11 @@ document.getElementById('contactForm').addEventListener('submit', function(e) {
 <script>lucide.createIcons();</script>
 
 <script>
+// Services always expanded in homepage
+document.querySelectorAll('.service').forEach(function (el) {
+  el.classList.add('active');
+});
+
 window.scrollObserver = new IntersectionObserver(function (entries) {
   entries.forEach(function (entry) {
     if (entry.isIntersecting) {
