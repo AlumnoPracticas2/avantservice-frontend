@@ -4,7 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reparación de Calderas y Calefacción | AvantService</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@400;600;700&display=swap">
     <link rel="stylesheet" href="services.css">
+    <script>var t=localStorage.getItem("avantservice-theme");if(t==="light")document.documentElement.setAttribute("data-theme","light");</script>
 </head>
 <body>
 
@@ -13,7 +17,16 @@
         <img src="logo.svg" width="60px" alt="AvantService">
         <h1>AvantService</h1>
     </div>
-    <nav>
+    <div class="header-actions">
+        <button id="theme-toggle" class="theme-toggle" aria-label="Cambiar tema">
+            <span class="icon-moon">🌙</span>
+            <span class="icon-sun">☀️</span>
+        </button>
+        <button class="nav-toggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="main-nav">
+            <span></span><span></span><span></span>
+        </button>
+    </div>
+    <nav id="main-nav">
         <a href="index.html">Inicio</a>
         <a href="index.html#services">Servicios</a>
         <a href="blog.html">Blog</a>
@@ -93,6 +106,8 @@
 </footer>
 
 <script src="script.js"></script>
+<script src="theme.js"></script>
+<script src="nav.js"></script>
 <script src="tracker.js"></script>
 </body>
 </html>
