@@ -1,0 +1,16 @@
+# ── IA y herramientas de desarrollo ──
+.claude/
+.superpowers/
+docs/
+CLAUDE.md
+
+# ── Sistema operativo ──
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── Editores ──
+.vscode/
+.idea/
+*.swp
+*.swo
