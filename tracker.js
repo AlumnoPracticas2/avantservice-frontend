@@ -1,7 +1,7 @@
 ;(function () {
   'use strict';
 
-  var TRACK_URL = 'http://localhost:3000/api/track';
+  var TRACK_URL = (typeof AVANTSERVICE_CONFIG !== 'undefined') ? AVANTSERVICE_CONFIG.API_TRACK : 'http://localhost:3000/api/track';
 
   // ── IDs ────────────────────────────────────────────────────────────────────
 

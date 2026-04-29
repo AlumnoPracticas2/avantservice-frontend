@@ -1,0 +1,67 @@
+# AvantService - Cabeceras de seguridad HTTP
+
+# Cabeceras de seguridad
+<IfModule mod_headers.c>
+    # Evita que el sitio sea embebido en iframes de otros dominios (clickjacking)
+    Header always set X-Frame-Options "SAMEORIGIN"
+
+    # Evita que el navegador adivine el tipo de contenido (MIME sniffing)
+    Header always set X-Content-Type-Options "nosniff"
+
+    # Activa la protección XSS del navegador (IE/Edge legacy)
+    Header always set X-XSS-Protection "1; mode=block"
+
+    # Controla qué información de referencia se envía al navegar fuera
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+
+    # Permisos de APIs del navegador — desactiva las que no usas
+    Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=()"
+
+    # Content Security Policy
+    # Permite recursos solo de orígenes conocidos
+    Header always set Content-Security-Policy "\
+default-src 'self'; \
+script-src 'self' 'unsafe-inline' https://unpkg.com https://formsubmit.co; \
+style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; \
+font-src 'self' https://fonts.gstatic.com; \
+img-src 'self' data: https:; \
+connect-src 'self' https://formsubmit.co https://api.avantservice.es; \
+frame-ancestors 'self'; \
+form-action 'self' https://formsubmit.co https://api.avantservice.es;"
+</IfModule>
+
+# Oculta la versión de Apache
+ServerTokens Prod
+ServerSignature Off
+
+# Deshabilita la lista de archivos del directorio
+Options -Indexes
+
+# Protege archivos sensibles — nadie puede acceder desde el navegador
+<FilesMatch "\.(htaccess|htpasswd|env|log|sh|sql|json|md|git)$">
+    Require all denied
+</FilesMatch>
+
+# Fuerza HTTPS (descomenta cuando tengas certificado SSL)
+# <IfModule mod_rewrite.c>
+#     RewriteEngine On
+#     RewriteCond %{HTTPS} off
+#     RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+# </IfModule>
+
+# Cache para archivos estáticos
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType text/css "access plus 1 month"
+    ExpiresByType application/javascript "access plus 1 month"
+    ExpiresByType image/jpeg "access plus 3 months"
+    ExpiresByType image/png "access plus 3 months"
+    ExpiresByType image/svg+xml "access plus 3 months"
+    ExpiresByType font/otf "access plus 1 year"
+    ExpiresByType text/html "access plus 1 hour"
+</IfModule>
+
+# Compresión gzip
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/css application/javascript text/plain
+</IfModule>

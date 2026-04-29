@@ -1,3 +1,4 @@
+function _esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 var _cf = document.getElementById('contactForm');
 if (_cf) _cf.addEventListener('submit', function (e) {
     e.preventDefault();
@@ -39,8 +40,8 @@ if (_cf) _cf.addEventListener('submit', function (e) {
             panel.classList.add('success');
             dataDiv.innerHTML = `
                 <h3>✅ ¡Mensaje Enviado!</h3>
-                <p>Hola <strong>${formData.nombre}</strong>, hemos recibido tu consulta sobre <strong>${formData.producto}</strong>.</p>
-                <p>Nos pondremos en contacto contigo en breve al correo <em>${formData.correo}</em>.</p>
+                <p>Hola <strong>${_esc(formData.nombre)}</strong>, hemos recibido tu consulta sobre <strong>${_esc(formData.producto)}</strong>.</p>
+                <p>Nos pondremos en contacto contigo en breve al correo <em>${_esc(formData.correo)}</em>.</p>
             `;
             document.getElementById('contactForm').reset();
         } else {

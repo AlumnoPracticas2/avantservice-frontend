@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@400;600;700&display=swap">
     <link rel="stylesheet" href="services.css">
-    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <script src="https://unpkg.com/lucide@1.14.0/dist/umd/lucide.min.js" integrity="sha384-jB6ZXxyEV94yzTxgLMvrwwNbn/pTTqwrMDI+v8FV5o5FnId/yn3DJwSdrDujU9A7" crossorigin="anonymous"></script>
     <style>
         /* ── UTILIDADES ──────────────────────────────────────────────────── */
         .cyan {
@@ -754,7 +754,7 @@
 <section class="hero">
     <div class="hero-glow" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:500px;height:200px;background:radial-gradient(ellipse,rgba(0,240,255,0.08) 0%,transparent 70%);pointer-events:none;animation:breathe 4s ease-in-out infinite;"></div>
     <h2>Soluciones <span id="typewriter-target" style="color:var(--acc-cyan);text-shadow:0 0 30px rgba(0,240,255,0.5)"></span><span id="typewriter-cursor" style="display:inline-block;width:2px;height:0.9em;background:var(--acc-cyan);margin-left:2px;vertical-align:middle;animation:blink 1s step-end infinite;"></span><br>para tu hogar</h2>
-    <p>En AvantService ofrecemos servicios de alta calidad adaptados a tus necesidades.</p>
+    <p>En AvantService ofrecemos servicios de alta calidad adaptados a tus necesidades. ¿Prefieres intentarlo tú mismo? Prueba <a href="reparalo.html" style="color:var(--acc-cyan);font-weight:700;text-decoration:none;border-bottom:1px solid rgba(0,240,255,0.4);transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--acc-cyan)'" onmouseout="this.style.borderColor='rgba(0,240,255,0.4)'">AvantFix</a>, nuestra guía gratuita de reparación paso a paso.</p>
 </section>
 
 <section id="services" class="services">
@@ -978,7 +978,7 @@
 
         <!-- Cuerpo del modal -->
         <div class="modal-body">
-        <form id="contactForm" action="http://localhost:3000/contacto" method="POST" class="avant-form">
+        <form id="contactForm" action="http://localhost:3000/contacto" method="POST" class="avant-form" data-api-action="contacto">
             <input type="hidden" name="origen_sitio" value="AVANTSERVICE">
             <input type="hidden" id="modal-hidden-sub" name="subapartado" value="">
 
@@ -1029,6 +1029,7 @@
                 </div>
             </div>
 
+            <p class="form-error-msg" style="display:none;color:#f87171;font-size:0.85rem;margin-bottom:8px;"></p>
             <button type="submit" class="btn-submit">ENVIAR</button>
 
             <div class="confirm-banner" id="modal-confirm">
@@ -1125,19 +1126,29 @@ document.addEventListener('keydown', function(e) {
 document.getElementById('contactForm').addEventListener('submit', function(e) {
     e.preventDefault();
     var form = this;
-    var confirm = document.getElementById('modal-confirm');
+    var confirmEl = document.getElementById('modal-confirm');
     var submitBtn = form.querySelector('.btn-submit');
+    var errorEl = form.querySelector('.form-error-msg');
+    var API_CONTACT = (typeof AVANTSERVICE_CONFIG !== 'undefined') ? AVANTSERVICE_CONFIG.API_CONTACT : 'http://localhost:3000/contacto';
+
+    var nombre = (form.querySelector('[name="nombre"]') || {value:''}).value.trim();
+    var email  = (form.querySelector('[name="correo"]') || form.querySelector('[name="email"]') || {value:''}).value.trim();
+    var tel    = (form.querySelector('[name="telefono"]') || {value:''}).value.trim();
+    if (!nombre || nombre.length < 2) { showFErr(errorEl, 'Por favor, introduce tu nombre.'); return; }
+    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showFErr(errorEl, 'Introduce un correo electrónico válido.'); return; }
+    if (tel && !/^[+\d\s\-]{7,15}$/.test(tel)) { showFErr(errorEl, 'El teléfono no tiene un formato válido.'); return; }
+    if (errorEl) { errorEl.style.display = 'none'; errorEl.textContent = ''; }
 
     submitBtn.disabled = true;
     submitBtn.textContent = 'Enviando…';
 
-    fetch(form.action, {
+    fetch(API_CONTACT, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(Object.fromEntries(new FormData(form)))
     })
-    .then(function(r) {
-        confirm.classList.add('visible');
+    .then(function() {
+        confirmEl.classList.add('visible');
         form.reset();
         submitBtn.style.display = 'none';
         setTimeout(closeModal, 3200);
@@ -1145,9 +1156,10 @@ document.getElementById('contactForm').addEventListener('submit', function(e) {
     .catch(function() {
         submitBtn.disabled = false;
         submitBtn.textContent = 'ENVIAR';
-        alert('Error al enviar. Por favor, inténtalo de nuevo.');
+        showFErr(errorEl, 'Error al enviar. Por favor, inténtalo de nuevo.');
     });
 });
+function showFErr(el, msg) { if (el) { el.textContent = msg; el.style.display = 'block'; } }
 </script>
 
 <script>
@@ -1181,6 +1193,7 @@ document.getElementById('contactForm').addEventListener('submit', function(e) {
 })();
 </script>
 
+<script src="config.js"></script>
 <script src="theme.js"></script>
 <script src="nav.js"></script>
 <script src="tracker.js"></script>
@@ -1234,7 +1247,7 @@ document.querySelectorAll('.service').forEach(function (el) {
         return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
     }
 
-    fetch('http://localhost:3000/api/blog')
+    fetch((typeof AVANTSERVICE_CONFIG !== 'undefined') ? AVANTSERVICE_CONFIG.API_BLOG : 'http://localhost:3000/api/blog')
         .then(function(r) { return r.json(); })
         .then(function(posts) {
             var grid = document.getElementById('recent-blog-grid');

@@ -8,29 +8,61 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@400;600;700&display=swap">
     <link rel="stylesheet" href="services.css">
-    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <script src="https://unpkg.com/lucide@1.14.0/dist/umd/lucide.min.js" integrity="sha384-jB6ZXxyEV94yzTxgLMvrwwNbn/pTTqwrMDI+v8FV5o5FnId/yn3DJwSdrDujU9A7" crossorigin="anonymous"></script>
     <style>
         .diy-page {
             max-width: 780px;
             margin: 0 auto;
-            padding: 60px 20px 80px;
+            padding: 110px 20px 80px;
         }
 
         .diy-page-title {
-            font-size: 2.2rem;
-            font-weight: bold;
+            font-size: clamp(2.8rem, 7vw, 4rem);
+            font-weight: 800;
             color: #fff;
-            margin-bottom: 8px;
+            margin-bottom: 12px;
+            letter-spacing: -0.02em;
+            line-height: 1.05;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
         }
 
-        .diy-page-title span { color: var(--acc-cyan); text-shadow: 0 0 15px rgba(0,240,255,0.4); }
-        [data-theme="light"] .diy-page-title span { 
-            text-shadow: none; 
-            background: linear-gradient(90deg, var(--acc-cyan), var(--acc-blue));
+        .diy-page-title .avant {
+            background: linear-gradient(90deg, #bf5fff, #00f0ff);
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
-            font-weight: 800;
+            filter: drop-shadow(0 0 18px rgba(180, 80, 255, 0.45));
+        }
+
+        .diy-title-badge {
+            font-size: 0.6rem;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--acc-cyan);
+            border: 1px solid rgba(0,240,255,0.35);
+            background: rgba(0,240,255,0.07);
+            padding: 4px 10px;
+            border-radius: 20px;
+            vertical-align: middle;
+            align-self: center;
+            margin-top: 6px;
+        }
+
+        [data-theme="light"] .diy-page-title .avant {
+            background: linear-gradient(90deg, #9333ea, #0891b2);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: none;
+        }
+
+        [data-theme="light"] .diy-title-badge {
+            border-color: rgba(14,116,144,0.35);
+            background: rgba(14,116,144,0.07);
         }
 
         .diy-page-subtitle {
@@ -148,6 +180,12 @@
             color: var(--text-secondary);
             cursor: pointer;
         }
+        .diy-accept.locked {
+            opacity: 0.45;
+            cursor: not-allowed;
+            user-select: none;
+        }
+
         .diy-accept input[type="checkbox"] {
             margin-top: 2px;
             accent-color: var(--acc-cyan);
@@ -233,7 +271,7 @@
 
 <div class="diy-page">
 
-    <h1 class="diy-page-title"><span>Avant</span>Fix</h1>
+    <h1 class="diy-page-title"><span class="avant">AvantFix</span><span class="diy-title-badge">Gratis</span></h1>
     <p class="diy-page-subtitle">Selecciona el nivel de dificultad de tu problema y te orientamos. Puedes enviarnos tu consulta directamente desde aquí.</p>
 
 
@@ -296,7 +334,7 @@
             <p><strong>Reparaciones de nivel Difícil</strong> — Las reparaciones clasificadas como nivel <strong class="text-danger-light">Difícil</strong> están recomendadas exclusivamente para técnicos o profesionales del sector. AvantService desaconseja expresamente su realización por parte de usuarios sin formación específica, pudiendo implicar riesgos eléctricos, mecánicos o de seguridad, así como la anulación de la garantía del fabricante.</p>
             <p><strong>Cobertura y tarifas</strong> — AvantService no cubre fallos preexistentes del producto ni daños ocasionados por un uso indebido. La tarifa indicada corresponde únicamente al servicio de asesoramiento o visita técnica, y no incluye piezas, materiales ni trabajos adicionales no presupuestados.</p>
             <p><strong>Requisito de edad</strong> — El uso de este servicio está reservado a personas mayores de 18 años. Al enviar una consulta, el usuario declara ser mayor de edad o contar con el consentimiento expreso de su tutor legal. AvantService se reserva el derecho de cancelar cualquier solicitud cuando existan indicios razonables de que el usuario es menor de edad sin la supervisión de un adulto responsable.</p>
-            <p>Para más información consulta el <a href="legal.html" style="color:var(--acc-cyan);text-decoration:underline;">Aviso Legal completo</a>.</p>
+            <p>Para más información consulta el <a href="legal.html" id="legal-link" style="color:var(--acc-cyan);text-decoration:underline;">Aviso Legal completo</a>. <strong style="color:var(--acc-cyan);font-size:0.82rem;">Debes leerlo para poder aceptar.</strong></p>
         </div>
     </div>
 
@@ -311,11 +349,22 @@
         </div>
     </div>
 
-    <label class="diy-accept">
-        <input type="checkbox" id="diy-terms-check">
-        He leído y acepto las condiciones del servicio. Declaro ser mayor de 18 años o contar con el consentimiento de mi tutor legal. Soy consciente de que AvantService no asume responsabilidad por daños, fallos del producto o riesgos derivados de mi actuación, y que las reparaciones de nivel Difícil están recomendadas para profesionales.
-    </label>
+    <div id="legal-gate" style="
+        border:1px solid rgba(0,240,255,0.2);
+        border-radius:12px;
+        padding:16px 20px;
+        background:rgba(0,240,255,0.03);
+        display:flex;
+        align-items:center;
+        gap:14px;
+        font-size:0.85rem;
+        line-height:1.5;
+    ">
+        <i data-lucide="shield-alert" style="width:22px;height:22px;stroke:var(--acc-cyan);flex-shrink:0;"></i>
+        <span>Para enviar tu consulta debes leer y aceptar el <a href="legal.html" style="color:var(--acc-cyan);font-weight:700;text-decoration:underline;">Aviso Legal completo</a>. El botón de envío se desbloqueará una vez lo hayas aceptado.</span>
+    </div>
 
+    <p id="diy-error-msg" style="display:none;color:#f87171;font-size:0.85rem;margin-bottom:8px;"></p>
     <button id="diy-send-btn" class="diy-send-btn" aria-disabled="true">
         <i data-lucide="mail"></i> Enviar consulta a AvantService
     </button>
@@ -332,8 +381,19 @@
 
 <script>
 var activeDiff = 'facil';
-var checkbox   = document.getElementById('diy-terms-check');
 var sendBtn    = document.getElementById('diy-send-btn');
+var legalGate  = document.getElementById('legal-gate');
+
+function checkLegalAccepted() {
+    if (sessionStorage.getItem('legal-accepted') === '1') {
+        sendBtn.setAttribute('aria-disabled', 'false');
+        if (legalGate) legalGate.style.display = 'none';
+    } else {
+        sendBtn.setAttribute('aria-disabled', 'true');
+    }
+}
+
+checkLegalAccepted();
 
 document.querySelectorAll('.diy-diff-btn').forEach(function(btn) {
     btn.addEventListener('click', function() {
@@ -346,16 +406,18 @@ document.querySelectorAll('.diy-diff-btn').forEach(function(btn) {
     });
 });
 
-checkbox.addEventListener('change', function() {
-    sendBtn.setAttribute('aria-disabled', this.checked ? 'false' : 'true');
-});
 
 sendBtn.addEventListener('click', function() {
     if (this.getAttribute('aria-disabled') === 'true') return;
     var email   = document.getElementById('diy-email').value.trim();
     var mensaje = document.getElementById('diy-mensaje').value.trim();
-    if (!email)   { alert('Por favor, introduce tu correo electrónico.'); return; }
-    if (!mensaje) { alert('Por favor, describe brevemente el problema.'); return; }
+    var errorEl = document.getElementById('diy-error-msg');
+    function showErr(msg) { if (errorEl) { errorEl.textContent = msg; errorEl.style.display = 'block'; } }
+    function hideErr() { if (errorEl) { errorEl.style.display = 'none'; errorEl.textContent = ''; } }
+
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showErr('Por favor, introduce un correo electrónico válido.'); return; }
+    if (!mensaje || mensaje.length < 10) { showErr('Por favor, describe brevemente el problema (mínimo 10 caracteres).'); return; }
+    hideErr();
 
     sendBtn.setAttribute('aria-disabled', 'true');
     sendBtn.textContent = 'Enviando…';
@@ -378,11 +440,11 @@ sendBtn.addEventListener('click', function() {
             throw new Error(data.message || 'Error desconocido');
         }
     })
-    .catch(function(err) {
+    .catch(function() {
         sendBtn.setAttribute('aria-disabled', 'false');
         sendBtn.innerHTML = '<i data-lucide="mail"></i> Enviar consulta a AvantService';
         lucide.createIcons({ nodes: [sendBtn] });
-        alert('No se pudo enviar la consulta. Por favor, inténtalo de nuevo más tarde.');
+        showErr('No se pudo enviar la consulta. Por favor, inténtalo de nuevo más tarde.');
     });
 });
 </script>

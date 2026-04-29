@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@400;600;700&display=swap">
     <link rel="stylesheet" href="services.css">
-    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <script src="https://unpkg.com/lucide@1.14.0/dist/umd/lucide.min.js" integrity="sha384-jB6ZXxyEV94yzTxgLMvrwwNbn/pTTqwrMDI+v8FV5o5FnId/yn3DJwSdrDujU9A7" crossorigin="anonymous"></script>
     <style>
         .portal-page {
             max-width: 680px;
@@ -226,7 +226,7 @@
         return;
     }
 
-    fetch('http://localhost:3000/api/presupuesto?token=' + encodeURIComponent(token))
+    fetch(((typeof AVANTSERVICE_CONFIG !== 'undefined') ? AVANTSERVICE_CONFIG.API_BUDGET : 'http://localhost:3000/api/presupuesto') + '?token=' + encodeURIComponent(token))
         .then(function(r) { return r.json(); })
         .then(function(data) {
             if (data.error) { root.innerHTML = '<div class="error-state">' + esc(data.error) + '</div>'; return; }
@@ -305,7 +305,7 @@
         if (btnA) btnA.disabled = true;
         if (btnR) btnR.disabled = true;
 
-        fetch('http://localhost:3000/api/presupuesto/aceptar', {
+        fetch(((typeof AVANTSERVICE_CONFIG !== 'undefined') ? AVANTSERVICE_CONFIG.API_BUDGET : 'http://localhost:3000/api/presupuesto') + '/aceptar', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ token: token, accion: accion })
@@ -313,19 +313,30 @@
         .then(function(r) { return r.json(); })
         .then(function(data) {
             if (data.success) {
-                // Recargar para mostrar el estado actualizado
                 window.location.reload();
             } else {
-                alert(data.message || 'Error al procesar la respuesta.');
+                showPortalError(data.message || 'Error al procesar la respuesta.');
                 if (btnA) btnA.disabled = false;
                 if (btnR) btnR.disabled = false;
             }
         })
         .catch(function() {
-            alert('No se pudo conectar con el servidor.');
+            showPortalError('No se pudo conectar con el servidor.');
             if (btnA) btnA.disabled = false;
             if (btnR) btnR.disabled = false;
         });
+    }
+
+    function showPortalError(msg) {
+        var el = document.getElementById('portal-error-msg');
+        if (!el) {
+            el = document.createElement('p');
+            el.id = 'portal-error-msg';
+            el.style.cssText = 'color:#f87171;font-size:0.9rem;margin-top:12px;text-align:center;';
+            var root = document.getElementById('portal-root');
+            if (root) root.appendChild(el);
+        }
+        el.textContent = msg;
     }
 
     function esc(str) {
@@ -333,6 +344,7 @@
     }
 })();
 </script>
+<script src="config.js"></script>
 <script src="theme.js"></script>
 <script src="nav.js"></script>
 <script>lucide.createIcons();</script>

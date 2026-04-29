@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@400;600;700;800;900&display=swap">
     <link rel="stylesheet" href="services.css">
-    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <script src="https://unpkg.com/lucide@1.14.0/dist/umd/lucide.min.js" integrity="sha384-jB6ZXxyEV94yzTxgLMvrwwNbn/pTTqwrMDI+v8FV5o5FnId/yn3DJwSdrDujU9A7" crossorigin="anonymous"></script>
     <script>var t=localStorage.getItem("avantservice-theme");if(t==="light")document.documentElement.setAttribute("data-theme","light");</script>
     <style>
         /* ── HERO MEJORADO ──────────────────────────────────────────────── */
@@ -546,7 +546,7 @@
         </div>
         <div class="modal-divider"></div>
         <div class="modal-body">
-            <form id="contactForm" action="http://localhost:3000/contacto" method="POST" class="avant-form">
+            <form id="contactForm" action="http://localhost:3000/contacto" method="POST" class="avant-form" data-api-action="contacto">
                 <input type="hidden" name="origen_sitio" value="AVANTSERVICE">
                 <input type="hidden" id="modal-hidden-sub" name="subapartado" value="">
                 <div class="form-grid">
@@ -588,6 +588,7 @@
                         <textarea id="input-mensaje" name="mensaje" rows="3" placeholder="Explícanos brevemente tu situación..."></textarea>
                     </div>
                 </div>
+                <p class="form-error-msg" style="display:none;color:#f87171;font-size:0.85rem;margin-bottom:8px;"></p>
                 <button type="submit" class="btn-submit">Enviar solicitud</button>
                 <div class="confirm-banner" id="modal-confirm">
                     <span class="confirm-banner-icon"><i data-lucide="circle-check"></i></span>
@@ -608,6 +609,8 @@
     <p>&copy; 2026 AvantService - Soluciones Tecnológicas de Vanguardia</p>
 </footer>
 
+<script src="config.js"></script>
+<script src="script.js"></script>
 <script>
 (function() {
     var modal      = document.getElementById('contact-modal');
@@ -615,14 +618,17 @@
     var serviceTag = document.getElementById('modal-service-tag');
     var hiddenSub  = document.getElementById('modal-hidden-sub');
     var selectProb = document.getElementById('modal-problema');
+    var API_CONTACT = (typeof AVANTSERVICE_CONFIG !== 'undefined') ? AVANTSERVICE_CONFIG.API_CONTACT : 'http://localhost:3000/contacto';
+
+    function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
     function openModal(servicio, sub, detalle, problema) {
-        var label = servicio + ' · ' + sub;
-        if (detalle) label += ' · ' + detalle;
+        var label = esc(servicio) + ' · ' + esc(sub);
+        if (detalle) label += ' · ' + esc(detalle);
         serviceTag.innerHTML = '<i data-lucide="clipboard-list"></i> ' + label;
         lucide.createIcons({ nodes: [serviceTag] });
         hiddenSub.value = detalle || sub;
-        if (problema && selectProb.querySelector('option[value="' + problema + '"]')) {
+        if (problema && selectProb.querySelector('option[value="' + esc(problema) + '"]')) {
             selectProb.value = problema;
         }
         modal.classList.add('open');
@@ -657,13 +663,24 @@
     document.getElementById('contactForm').addEventListener('submit', function(e) {
         e.preventDefault();
         var form = this;
-        var confirm = document.getElementById('modal-confirm');
+        var confirmEl = document.getElementById('modal-confirm');
         var submitBtn = form.querySelector('.btn-submit');
+        var errorEl = form.querySelector('.form-error-msg');
+
+        // Validación básica
+        var nombre = form.querySelector('[name="nombre"]').value.trim();
+        var email  = form.querySelector('[name="email"]').value.trim();
+        var tel    = form.querySelector('[name="telefono"]').value.trim();
+        if (!nombre || nombre.length < 2) { showError(errorEl, 'Por favor, introduce tu nombre.'); return; }
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showError(errorEl, 'Introduce un correo electrónico válido.'); return; }
+        if (tel && !/^[+\d\s\-]{7,15}$/.test(tel)) { showError(errorEl, 'El teléfono no tiene un formato válido.'); return; }
+        hideError(errorEl);
+
         submitBtn.disabled = true;
         submitBtn.textContent = 'Enviando…';
-        fetch(form.action, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(Object.fromEntries(new FormData(form))) })
+        fetch(API_CONTACT, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(Object.fromEntries(new FormData(form))) })
             .then(function() {
-                confirm.classList.add('visible');
+                confirmEl.classList.add('visible');
                 form.reset();
                 submitBtn.style.display = 'none';
                 setTimeout(closeModal, 3200);
@@ -671,12 +688,14 @@
             .catch(function() {
                 submitBtn.disabled = false;
                 submitBtn.textContent = 'Enviar solicitud';
-                alert('Error al enviar. Por favor, inténtalo de nuevo.');
+                showError(errorEl, 'Error al enviar. Por favor, inténtalo de nuevo.');
             });
     });
+
+    function showError(el, msg) { if (el) { el.textContent = msg; el.style.display = 'block'; } }
+    function hideError(el) { if (el) { el.style.display = 'none'; el.textContent = ''; } }
 })();
 </script>
-<script src="script.js"></script>
 <script>var h=document.querySelector('.hero-service');if(h)h.style.setProperty('--hero-bg','url("img/calderas.jpg")');</script>
 <script src="theme.js"></script>
 <script src="nav.js"></script>
