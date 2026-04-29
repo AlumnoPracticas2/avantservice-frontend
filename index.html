@@ -22,13 +22,14 @@
         }
 
         /* Asegura que el contenido queda sobre el canvas */
-        header, .hero, .services, .recent-blog-section, footer {
+        .hero, .services, .recent-blog-section, footer {
             position: relative;
             z-index: 1;
         }
 
         header {
             animation: slideDown 0.6s cubic-bezier(0.4, 0, 0.2, 1) both;
+            z-index: 999;
         }
 
         header .logo-group img {
@@ -487,44 +488,107 @@
         }
 
         .recent-blog-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
         }
 
+        /* Fila de secundarias con scroll horizontal */
+        .rb-secondary-row {
+            overflow-x: scroll;
+            scrollbar-width: none;
+            cursor: grab;
+        }
+        .rb-secondary-row::-webkit-scrollbar { display: none; }
+
+        .rb-secondary-track {
+            display: flex;
+            gap: 16px;
+        }
+
+        /* Tarjeta base */
         .rb-card {
             background: var(--glass-bg);
             border: 1px solid var(--glass-border);
-            border-radius: 16px;
+            border-radius: 8px;
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            transition: transform 0.3s, border-color 0.2s;
             text-decoration: none;
             color: inherit;
+            transition: border-color 0.25s, transform 0.25s;
+            opacity: 0;
+            transform: translateY(28px);
+        }
+
+        .rb-card.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .rb-card:hover {
-            transform: scale(1) translateY(-4px);
-            border-color: rgba(0, 240, 255, 0.25);
+            border-color: rgba(0, 240, 255, 0.3);
+            transform: translateY(-3px);
+        }
+
+        /* Tarjeta destacada */
+        .rb-card.rb-featured {
+            flex-direction: row;
+        }
+
+        /* Tarjetas secundarias: ancho fijo generoso */
+        .rb-secondary-track .rb-card {
+            flex-shrink: 0;
+            width: clamp(260px, 33%, 340px);
         }
 
         .rb-card-img {
-            width: 100%;
-            height: 160px;
-            background: linear-gradient(135deg, rgba(0, 87, 255, 0.2), rgba(0, 240, 255, 0.1));
+            background: linear-gradient(135deg, rgba(0, 87, 255, 0.25), rgba(0, 240, 255, 0.1));
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 2.8rem;
+            flex-shrink: 0;
+        }
+
+        .rb-secondary-track .rb-card .rb-card-img {
+            height: 140px;
+            width: 100%;
+        }
+
+        /* Imagen en featured */
+        .rb-card.rb-featured .rb-card-img {
+            width: 300px;
+            font-size: 4rem;
+            position: relative;
+        }
+
+        .rb-card.rb-featured .rb-card-img::after {
+            content: 'DESTACADO';
+            position: absolute;
+            top: 14px;
+            left: 14px;
+            font-size: 0.58rem;
+            font-weight: 700;
+            letter-spacing: 0.18em;
+            color: var(--acc-cyan);
+            background: rgba(0,240,255,0.08);
+            border: 1px solid rgba(0,240,255,0.2);
+            padding: 3px 8px;
+            border-radius: 2px;
         }
 
         .rb-card-body {
-            padding: 20px;
+            padding: 20px 22px;
             flex: 1;
             display: flex;
             flex-direction: column;
             gap: 8px;
+        }
+
+        .rb-card.rb-featured .rb-card-body {
+            justify-content: center;
+            gap: 12px;
         }
 
         .rb-card-meta {
@@ -534,46 +598,64 @@
         }
 
         .rb-card-cat {
-            background: rgba(0, 240, 255, 0.1);
+            background: rgba(0, 240, 255, 0.08);
             border: 1px solid rgba(0, 240, 255, 0.2);
             color: var(--acc-cyan);
             padding: 2px 10px;
-            border-radius: 10px;
-            font-size: 0.7rem;
+            border-radius: 2px;
+            font-size: 0.65rem;
             text-transform: uppercase;
-            letter-spacing: 0.08em;
+            letter-spacing: 0.1em;
+            font-weight: 600;
         }
 
         .rb-card-date {
             color: var(--text-secondary);
-            font-size: 0.75rem;
+            font-size: 0.72rem;
+            opacity: 0.6;
         }
 
         .rb-card-body h3 {
-            font-size: 1rem;
+            font-size: 0.95rem;
             font-weight: 600;
             line-height: 1.4;
             margin: 0;
         }
 
+        .rb-card.rb-featured .rb-card-body h3 {
+            font-size: 1.25rem;
+        }
+
         .rb-card-body p {
             color: var(--text-secondary);
-            font-size: 0.85rem;
-            line-height: 1.5;
+            font-size: 0.82rem;
+            line-height: 1.55;
             margin: 0;
             flex: 1;
             display: -webkit-box;
-            -webkit-line-clamp: 3;
+            -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
-            line-clamp: 3;
             overflow: hidden;
+        }
+
+        .rb-card.rb-featured .rb-card-body p {
+            -webkit-line-clamp: 3;
         }
 
         .rb-card-link {
             color: var(--acc-cyan);
-            font-size: 0.82rem;
+            font-size: 0.78rem;
             font-weight: 600;
             margin-top: 4px;
+            letter-spacing: 0.05em;
+        }
+
+        @media (max-width: 640px) {
+            .rb-card.rb-featured { flex-direction: column; }
+            .rb-card.rb-featured .rb-card-img { width: 100%; height: 130px; }
+            .rb-secondary-track .rb-card { width: 240px; }
+            .recent-blog-section { padding: 20px 16px 40px; }
+            .recent-blog-header { flex-direction: column; align-items: flex-start; gap: 12px; }
         }
 
         /* ── CONFIRM BANNER ──────────────────────────────────────────────── */
@@ -638,7 +720,7 @@
           opacity: 0.3;
         }
         [data-theme="light"] #particle-canvas {
-          opacity: 0.12 !important;
+          opacity: 0.5 !important;
         }
 
         /* Blog cards — revealed state handled via inline style clearing in scrollObserver */
@@ -665,13 +747,13 @@
     <nav id="main-nav">
         <a href="#">Inicio</a>
         <a href="#services">Servicios</a>
-        <a href="blog.html">Blog</a>
+        <a href="#blog">Blog</a>
     </nav>
 </header>
 
 <section class="hero">
     <div class="hero-glow" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:500px;height:200px;background:radial-gradient(ellipse,rgba(0,240,255,0.08) 0%,transparent 70%);pointer-events:none;animation:breathe 4s ease-in-out infinite;"></div>
-    <h2>Soluciones <span id="typewriter-target" style="color:var(--acc-cyan);text-shadow:0 0 30px rgba(0,240,255,0.5)"></span><span id="typewriter-cursor" style="display:inline-block;width:2px;height:0.9em;background:var(--acc-cyan);margin-left:2px;vertical-align:middle;animation:blink 1s step-end infinite;"></span><br>para tu hogar y empresa</h2>
+    <h2>Soluciones <span id="typewriter-target" style="color:var(--acc-cyan);text-shadow:0 0 30px rgba(0,240,255,0.5)"></span><span id="typewriter-cursor" style="display:inline-block;width:2px;height:0.9em;background:var(--acc-cyan);margin-left:2px;vertical-align:middle;animation:blink 1s step-end infinite;"></span><br>para tu hogar</h2>
     <p>En AvantService ofrecemos servicios de alta calidad adaptados a tus necesidades.</p>
 </section>
 
@@ -860,7 +942,7 @@
 </section>
 
 <!-- BLOGS RECIENTES -->
-<section class="recent-blog-section">
+<section class="recent-blog-section" id="blog">
     <div class="recent-blog-header">
         <h2>Últimas entradas del <span class="cyan">Blog</span></h2>
         <a href="blog.html" class="cta-button" style="padding: 8px 22px; font-size: 0.82rem;">Ver todos →</a>
@@ -1070,7 +1152,7 @@ document.getElementById('contactForm').addEventListener('submit', function(e) {
 
 <script>
 (function () {
-  var words = ['profesionales', 'de confianza', 'a domicilio'];
+  var words = ['rápidas', 'de confianza', 'profesionales', 'eficaces'];
   var wi = 0, ci = 0, deleting = false;
   var target = document.getElementById('typewriter-target');
   if (!target) return;
@@ -1139,38 +1221,100 @@ document.querySelectorAll('.service').forEach(function (el) {
         return parseInt(parts[2]) + ' ' + meses[parseInt(parts[1])-1] + ' ' + parts[0];
     }
 
+    var blogObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                blogObserver.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.12 });
+
+    function esc(str) {
+        return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
     fetch('http://localhost:3000/api/blog')
         .then(function(r) { return r.json(); })
         .then(function(posts) {
             var grid = document.getElementById('recent-blog-grid');
-            var recientes = posts.slice(0, 3);
+            var recientes = posts.slice(0, 6);
             if (!recientes.length) {
                 grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:var(--text-secondary);padding:30px 0;">No hay artículos publicados aún.</div>';
                 return;
             }
-            grid.innerHTML = recientes.map(function(p) {
+            function makeCard(p, i, featured) {
                 var img = p.emoji && p.emoji.startsWith('http')
                     ? '<img src="' + p.emoji + '" style="width:100%;height:100%;object-fit:cover;" alt="portada">'
                     : p.emoji;
-                return '<a class="rb-card" href="articulo.html?slug=' + p.slug + '">' +
+                var cls = 'rb-card' + (featured ? ' rb-featured' : '');
+                var delay = featured ? 0 : (i * 0.15);
+                return '<a class="' + cls + '" href="articulo.html?slug=' + encodeURIComponent(p.slug) + '" style="transition:opacity 0.6s ' + delay + 's ease,transform 0.6s ' + delay + 's ease,border-color 0.25s;">' +
                     '<div class="rb-card-img">' + img + '</div>' +
                     '<div class="rb-card-body">' +
                         '<div class="rb-card-meta">' +
-                            '<span class="rb-card-cat">' + p.categoria + '</span>' +
+                            '<span class="rb-card-cat">' + esc(p.categoria) + '</span>' +
                             '<span class="rb-card-date">' + formatFecha(p.fecha) + '</span>' +
                         '</div>' +
-                        '<h3>' + p.titulo + '</h3>' +
-                        '<p>' + p.resumen + '</p>' +
+                        '<h3>' + esc(p.titulo) + '</h3>' +
+                        '<p>' + esc(p.resumen) + '</p>' +
                         '<span class="rb-card-link">Leer más →</span>' +
                     '</div>' +
                 '</a>';
-            }).join('');
-            document.querySelectorAll('#recent-blog-grid .rb-card').forEach(function (el) {
-              el.style.opacity = '0';
-              el.style.transform = 'scale(0.93)';
-              el.style.transition = 'opacity 0.5s cubic-bezier(0.34, 1.2, 0.64, 1), transform 0.5s cubic-bezier(0.34, 1.2, 0.64, 1), border-color 0.2s';
-              window.scrollObserver.observe(el);
+            }
+
+            var featured = recientes[0];
+            var secondary = recientes.slice(1);
+
+            var html = makeCard(featured, 0, true);
+
+            if (secondary.length) {
+                html += '<div class="rb-secondary-row"><div class="rb-secondary-track">' +
+                    secondary.map(function(p, i) { return makeCard(p, i + 1, false); }).join('') +
+                '</div></div>';
+            }
+
+            grid.innerHTML = html;
+
+            // Animar entrada con observer
+            // Solo observar la tarjeta featured (las secundarias se marcan visibles antes del loop)
+            document.querySelectorAll('#recent-blog-grid .rb-featured').forEach(function(el) {
+                blogObserver.observe(el);
             });
+            document.querySelectorAll('#recent-blog-grid .rb-secondary-track .rb-card').forEach(function(el) {
+                el.classList.add('visible');
+            });
+
+            // Carrusel infinito: duplicar tarjetas y resetear posición al llegar al medio
+            if (secondary.length > 0) {
+                var row   = grid.querySelector('.rb-secondary-row');
+                var track = grid.querySelector('.rb-secondary-track');
+                if (row && track) {
+                    // Hacer visibles las tarjetas originales antes de duplicar
+                    track.querySelectorAll('.rb-card').forEach(function(el) {
+                        el.classList.add('visible');
+                    });
+                    // Duplicar el contenido para el loop
+                    track.innerHTML += track.innerHTML;
+
+                    var paused = false;
+                    var speed  = 0.6;
+                    row.addEventListener('mouseenter', function() { paused = true; });
+                    row.addEventListener('mouseleave', function() { paused = false; });
+
+                    function autoScroll() {
+                        if (!paused) {
+                            row.scrollLeft += speed;
+                            // Al llegar a la mitad (el duplicado), vuelve silenciosamente al inicio
+                            if (row.scrollLeft >= track.scrollWidth / 2) {
+                                row.scrollLeft = 0;
+                            }
+                        }
+                        requestAnimationFrame(autoScroll);
+                    }
+                    requestAnimationFrame(autoScroll);
+                }
+            }
         })
         .catch(function() {
             document.getElementById('recent-blog-grid').style.display = 'none';
@@ -1202,7 +1346,11 @@ document.querySelectorAll('.service').forEach(function (el) {
       vx: (Math.random() - 0.5) * 0.3,
       vy: -(Math.random() * 0.4 + 0.1),
       alpha: Math.random() * 0.6 + 0.2,
-      color: Math.random() > 0.6 ? '0,240,255' : '0,87,255',
+      color: (function() {
+        var light = document.documentElement.getAttribute('data-theme') === 'light';
+        if (light) return Math.random() > 0.6 ? '0,140,180' : '30,80,200';
+        return Math.random() > 0.6 ? '0,240,255' : '0,87,255';
+      })(),
       life: 0,
       maxLife: 200 + Math.random() * 200
     };

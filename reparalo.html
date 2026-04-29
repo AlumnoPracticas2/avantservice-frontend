@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@400;600;700&display=swap">
     <link rel="stylesheet" href="services.css">
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
     <style>
         .diy-page {
             max-width: 780px;
@@ -23,6 +24,14 @@
         }
 
         .diy-page-title span { color: var(--acc-cyan); text-shadow: 0 0 15px rgba(0,240,255,0.4); }
+        [data-theme="light"] .diy-page-title span { 
+            text-shadow: none; 
+            background: linear-gradient(90deg, var(--acc-cyan), var(--acc-blue));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+        }
 
         .diy-page-subtitle {
             color: var(--text-secondary);
@@ -208,8 +217,8 @@
     </div>
     <div class="header-actions">
         <button id="theme-toggle" class="theme-toggle" aria-label="Cambiar tema">
-            <span class="icon-moon">🌙</span>
-            <span class="icon-sun">☀️</span>
+            <span class="icon-moon"><i data-lucide="moon"></i></span>
+            <span class="icon-sun"><i data-lucide="sun"></i></span>
         </button>
         <button class="nav-toggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="main-nav">
             <span></span><span></span><span></span>
@@ -219,7 +228,6 @@
         <a href="index.html">Inicio</a>
         <a href="index.html#services">Servicios</a>
         <a href="blog.html">Blog</a>
-        <a href="index.html#contact">Contacto</a>
     </nav>
 </header>
 
@@ -231,17 +239,17 @@
 
     <div class="diy-diff-grid">
         <button class="diy-diff-btn active" data-diff="facil">
-            <span class="diy-diff-icon">🟢</span>
+            <span class="diy-diff-icon"><i data-lucide="circle"></i></span>
             <span class="diy-diff-title">Fácil</span>
             <span class="diy-diff-desc">Puedo intentar resolverlo yo mismo con instrucciones.</span>
         </button>
         <button class="diy-diff-btn" data-diff="medio">
-            <span class="diy-diff-icon">🟡</span>
+            <span class="diy-diff-icon"><i data-lucide="circle"></i></span>
             <span class="diy-diff-title">Medio</span>
             <span class="diy-diff-desc">Necesito orientación técnica más detallada.</span>
         </button>
         <button class="diy-diff-btn" data-diff="dificil">
-            <span class="diy-diff-icon">🔴</span>
+            <span class="diy-diff-icon"><i data-lucide="circle"></i></span>
             <span class="diy-diff-title">Difícil</span>
             <span class="diy-diff-desc">El problema parece grave o no sé por dónde empezar.</span>
         </button>
@@ -249,7 +257,7 @@
 
     <div id="diy-level-facil" class="diy-level-panel active">
         <div class="diy-verdict diy-verdict-ok">
-            ✅ Este tipo de problema suele resolverse siguiendo unos pasos básicos. Un técnico te guiará por escrito.
+            <i data-lucide="circle-check"></i> Este tipo de problema suele resolverse siguiendo unos pasos básicos. Un técnico te guiará por escrito.
         </div>
         <div class="diy-tarifa">
             <span class="diy-tarifa-label">Tarifa orientación básica (por email)</span>
@@ -259,7 +267,7 @@
 
     <div id="diy-level-medio" class="diy-level-panel">
         <div class="diy-verdict diy-verdict-warn">
-            🛠️ Este problema puede requerir orientación técnica detallada. Un técnico te asesorará paso a paso.
+            <i data-lucide="wrench"></i> Este problema puede requerir orientación técnica detallada. Un técnico te asesorará paso a paso.
         </div>
         <div class="diy-tarifa">
             <span class="diy-tarifa-label">Tarifa asesoramiento técnico (por email)</span>
@@ -269,7 +277,7 @@
 
     <div id="diy-level-dificil" class="diy-level-panel">
         <div class="diy-verdict diy-verdict-danger">
-            ⚠️ <strong>Reparación recomendada exclusivamente para profesionales.</strong> Este nivel de avería implica riesgos eléctricos, mecánicos o de seguridad que requieren la intervención de un técnico cualificado. No intentes realizarla por tu cuenta: podrías agravar el daño, anular la garantía o poner en riesgo tu seguridad.
+            <i data-lucide="alert-triangle"></i> <strong>Reparación recomendada exclusivamente para profesionales.</strong> Este nivel de avería implica riesgos eléctricos, mecánicos o de seguridad que requieren la intervención de un técnico cualificado. No intentes realizarla por tu cuenta: podrías agravar el daño, anular la garantía o poner en riesgo tu seguridad.
         </div>
         <div class="diy-tarifa">
             <span class="diy-tarifa-label">Tarifa visita técnica a domicilio</span>
@@ -283,11 +291,11 @@
             <span class="diy-terms-arrow">▼</span>
         </div>
         <div class="diy-terms-body">
-            <p><strong style="color:#e2e8f0;">Carácter del servicio</strong> — El servicio de orientación técnica ofrecido por AvantService tiene carácter exclusivamente informativo y de asesoramiento. Las indicaciones proporcionadas no sustituyen en ningún caso la intervención de un profesional cualificado.</p>
-            <p><strong style="color:#e2e8f0;">Limitación de responsabilidad</strong> — AvantService no asume ninguna responsabilidad por daños materiales, averías adicionales, lesiones personales o pérdidas económicas que pudieran derivarse de la actuación del usuario sobre el producto, con independencia del nivel de dificultad seleccionado. El usuario actúa siempre bajo su propia responsabilidad.</p>
-            <p><strong style="color:#e2e8f0;">Reparaciones de nivel Difícil</strong> — Las reparaciones clasificadas como nivel <strong style="color:#fda4af;">Difícil</strong> están recomendadas exclusivamente para técnicos o profesionales del sector. AvantService desaconseja expresamente su realización por parte de usuarios sin formación específica, pudiendo implicar riesgos eléctricos, mecánicos o de seguridad, así como la anulación de la garantía del fabricante.</p>
-            <p><strong style="color:#e2e8f0;">Cobertura y tarifas</strong> — AvantService no cubre fallos preexistentes del producto ni daños ocasionados por un uso indebido. La tarifa indicada corresponde únicamente al servicio de asesoramiento o visita técnica, y no incluye piezas, materiales ni trabajos adicionales no presupuestados.</p>
-            <p><strong style="color:#e2e8f0;">Requisito de edad</strong> — El uso de este servicio está reservado a personas mayores de 18 años. Al enviar una consulta, el usuario declara ser mayor de edad o contar con el consentimiento expreso de su tutor legal. AvantService se reserva el derecho de cancelar cualquier solicitud cuando existan indicios razonables de que el usuario es menor de edad sin la supervisión de un adulto responsable.</p>
+            <p><strong>Carácter del servicio</strong> — El servicio de orientación técnica ofrecido por AvantService tiene carácter exclusivamente informativo y de asesoramiento. Las indicaciones proporcionadas no sustituyen en ningún caso la intervención de un profesional cualificado.</p>
+            <p><strong>Limitación de responsabilidad</strong> — AvantService no asume ninguna responsabilidad por daños materiales, averías adicionales, lesiones personales o pérdidas económicas que pudieran derivarse de la actuación del usuario sobre el producto, con independencia del nivel de dificultad seleccionado. El usuario actúa siempre bajo su propia responsabilidad.</p>
+            <p><strong>Reparaciones de nivel Difícil</strong> — Las reparaciones clasificadas como nivel <strong class="text-danger-light">Difícil</strong> están recomendadas exclusivamente para técnicos o profesionales del sector. AvantService desaconseja expresamente su realización por parte de usuarios sin formación específica, pudiendo implicar riesgos eléctricos, mecánicos o de seguridad, así como la anulación de la garantía del fabricante.</p>
+            <p><strong>Cobertura y tarifas</strong> — AvantService no cubre fallos preexistentes del producto ni daños ocasionados por un uso indebido. La tarifa indicada corresponde únicamente al servicio de asesoramiento o visita técnica, y no incluye piezas, materiales ni trabajos adicionales no presupuestados.</p>
+            <p><strong>Requisito de edad</strong> — El uso de este servicio está reservado a personas mayores de 18 años. Al enviar una consulta, el usuario declara ser mayor de edad o contar con el consentimiento expreso de su tutor legal. AvantService se reserva el derecho de cancelar cualquier solicitud cuando existan indicios razonables de que el usuario es menor de edad sin la supervisión de un adulto responsable.</p>
             <p>Para más información consulta el <a href="legal.html" style="color:var(--acc-cyan);text-decoration:underline;">Aviso Legal completo</a>.</p>
         </div>
     </div>
@@ -309,11 +317,11 @@
     </label>
 
     <button id="diy-send-btn" class="diy-send-btn" aria-disabled="true">
-        ✉️ Enviar consulta a AvantService
+        <i data-lucide="mail"></i> Enviar consulta a AvantService
     </button>
 
     <div id="diy-confirm" class="confirm-banner">
-        <span class="confirm-banner-icon">✅</span>
+        <span class="confirm-banner-icon"><i data-lucide="circle-check"></i></span>
         <div>
             <span class="confirm-banner-title">¡Consulta enviada!</span>
             <span class="confirm-banner-text">Hemos recibido tu mensaje. Nos pondremos en contacto contigo en un plazo máximo de <strong>48 horas laborables</strong>.</span>
@@ -352,28 +360,34 @@ sendBtn.addEventListener('click', function() {
     sendBtn.setAttribute('aria-disabled', 'true');
     sendBtn.textContent = 'Enviando…';
 
-    fetch('http://localhost/backendavant/api.php?r=diy', {
+    fetch('https://formsubmit.co/ajax/avanteliteinformatica@gmail.com', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ nivel: activeDiff, email: email, mensaje: mensaje })
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({
+            _subject: 'AvantFix — Nueva consulta (' + activeDiff + ')',
+            nivel: activeDiff,
+            email: email,
+            mensaje: mensaje
+        })
     })
     .then(function(res) { return res.json(); })
     .then(function(data) {
-        if (data.success) {
+        if (data.success === 'true' || data.success === true) {
             window.location.href = 'success.html';
         } else {
-            throw new Error(data.error || 'Error desconocido');
+            throw new Error(data.message || 'Error desconocido');
         }
     })
     .catch(function(err) {
         sendBtn.setAttribute('aria-disabled', 'false');
-        sendBtn.textContent = '✉️ Enviar consulta a AvantService';
-        alert('Error al enviar: ' + err.message);
+        sendBtn.innerHTML = '<i data-lucide="mail"></i> Enviar consulta a AvantService';
+        lucide.createIcons({ nodes: [sendBtn] });
+        alert('No se pudo enviar la consulta. Por favor, inténtalo de nuevo más tarde.');
     });
 });
 </script>
 <script src="theme.js"></script>
 <script src="nav.js"></script>
-
+<script>lucide.createIcons();</script>
 </body>
 </html>

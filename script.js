@@ -1,4 +1,5 @@
-document.getElementById('contactForm').addEventListener('submit', function (e) {
+var _cf = document.getElementById('contactForm');
+if (_cf) _cf.addEventListener('submit', function (e) {
     e.preventDefault();
 
     // Obtener todos los campos
@@ -46,7 +47,7 @@ document.getElementById('contactForm').addEventListener('submit', function (e) {
             panel.classList.add('error');
             dataDiv.innerHTML = `
                 <h3>⚠️ Error al enviar</h3>
-                <p>${data.error || 'Hubo un problema al procesar los datos.'}</p>
+                <p>Hubo un problema al procesar los datos. Por favor, inténtalo de nuevo.</p>
             `;
         }
         panel.style.display = 'block';
@@ -55,7 +56,7 @@ document.getElementById('contactForm').addEventListener('submit', function (e) {
         panel.classList.add('error');
         dataDiv.innerHTML = `
             <h3>❌ Error de Conexión</h3>
-            <p>No se pudo conectar con el servidor. Verifica que WAMP esté ejecutándose.</p>
+            <p>No se pudo conectar con el servidor. Por favor, inténtalo de nuevo más tarde.</p>
         `;
         panel.style.display = 'block';
     })
@@ -86,4 +87,15 @@ document.addEventListener('DOMContentLoaded', () => {
             service.classList.toggle('active');
         });
     });
+
+    // Auto-expandir si venimos desde el botón de "Ver subcategorías"
+    if (window.location.hash === '#subcategories') {
+        setTimeout(() => {
+            services.forEach(service => service.classList.add('active'));
+            const target = document.querySelector('.service-details') || document.querySelector('.service-container');
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth' });
+            }
+        }, 100);
+    }
 });

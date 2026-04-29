@@ -3,6 +3,7 @@
 
 html {
     scroll-behavior: smooth;
+    overflow-x: hidden;
 }
 
 :root {
@@ -288,7 +289,6 @@ body {
         radial-gradient(circle at 85% 30%, rgba(0, 240, 255, 0.1), transparent 25%);
     background-attachment: fixed;
     color: var(--text-primary);
-    overflow-x: hidden;
 }
 
 /* En móvil, fixed background causa rendimiento pésimo en iOS/Android */
@@ -309,8 +309,10 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    position: sticky;
+    position: fixed;
     top: 0;
+    left: 0;
+    right: 0;
     z-index: 999;
     transition: all 0.3s ease;
 }
@@ -555,7 +557,7 @@ textarea:focus-visible {
     background-attachment: fixed;
     color: white;
     text-align: center;
-    padding: 160px 20px 140px;
+    padding: 160px 20px 80px;
     border-bottom: 1px solid var(--glass-border);
     position: relative;
 }
@@ -563,7 +565,7 @@ textarea:focus-visible {
 @media (max-width: 768px) {
     .hero {
         background-attachment: scroll;
-        padding: 100px 20px 80px;
+        padding: 70px 20px 60px;
     }
 }
 

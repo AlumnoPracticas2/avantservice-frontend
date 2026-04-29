@@ -6,9 +6,393 @@
     <title>Reparación de Televisores | AvantService</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@400;600;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@400;600;700;800;900&display=swap">
     <link rel="stylesheet" href="services.css">
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
     <script>var t=localStorage.getItem("avantservice-theme");if(t==="light")document.documentElement.setAttribute("data-theme","light");</script>
+    <style>
+        /* ── HERO MEJORADO ──────────────────────────────────────────────── */
+        .landing-hero {
+            position: relative;
+            min-height: 88vh;
+            padding: 120px 48px 72px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            overflow: hidden;
+        }
+
+        .hero-grid {
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(0,240,255,0.035) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0,240,255,0.035) 1px, transparent 1px);
+            background-size: 52px 52px;
+            mask-image: linear-gradient(to bottom, transparent 10%, rgba(0,0,0,0.5) 50%, transparent 95%);
+            pointer-events: none;
+        }
+
+        .landing-hero .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(0,240,255,0.08);
+            border: 1px solid rgba(0,240,255,0.25);
+            color: var(--acc-cyan);
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            padding: 6px 14px;
+            border-radius: 100px;
+            margin-bottom: 24px;
+            width: fit-content;
+        }
+
+        .badge-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--acc-cyan);
+            box-shadow: 0 0 8px var(--acc-cyan);
+            animation: badge-pulse 2.2s ease-in-out infinite;
+            flex-shrink: 0;
+        }
+
+        @keyframes badge-pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.35; transform: scale(0.7); }
+        }
+
+        .landing-hero h1 {
+            font-size: clamp(2.2rem, 5vw, 3.6rem);
+            font-weight: 900;
+            line-height: 1.08;
+            letter-spacing: -0.025em;
+            margin-bottom: 18px;
+            position: relative;
+        }
+
+        .landing-hero h1 em {
+            font-style: normal;
+            background: linear-gradient(90deg, var(--acc-cyan) 0%, var(--acc-blue) 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .landing-hero > p {
+            font-size: 1.05rem;
+            color: var(--text-secondary);
+            max-width: 500px;
+            line-height: 1.65;
+            margin-bottom: 36px;
+            position: relative;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            position: relative;
+        }
+
+        .hero-btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 13px 26px;
+            background: linear-gradient(135deg, var(--acc-cyan), var(--acc-blue));
+            color: #0B0F19;
+            font-family: inherit;
+            font-weight: 800;
+            font-size: 0.88rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: opacity 0.2s, transform 0.2s;
+        }
+
+        .hero-btn-primary:hover { opacity: 0.88; transform: translateY(-2px); }
+        .hero-btn-primary:focus-visible {
+            outline: 2px solid var(--acc-cyan);
+            outline-offset: 3px;
+        }
+
+        .hero-btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 13px 26px;
+            background: rgba(255,255,255,0.04);
+            color: var(--text-primary);
+            font-family: inherit;
+            font-weight: 600;
+            font-size: 0.88rem;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 10px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background 0.2s, border-color 0.2s;
+        }
+
+        .hero-btn-secondary:hover {
+            background: rgba(255,255,255,0.07);
+            border-color: rgba(0,240,255,0.3);
+        }
+
+        .hero-btn-secondary:focus-visible {
+            outline: 2px solid var(--acc-cyan);
+            outline-offset: 3px;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 0;
+            align-self: flex-end;
+            margin-top: 32px;
+            background: rgba(0,0,0,0.35);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(0,240,255,0.18);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .hero-stat {
+            text-align: center;
+            padding: 16px 28px;
+            position: relative;
+        }
+
+        .hero-stat + .hero-stat::before {
+            content: '';
+            position: absolute;
+            left: 0; top: 20%; bottom: 20%;
+            width: 1px;
+            background: rgba(0,240,255,0.18);
+        }
+
+        .hero-stat-num {
+            display: block;
+            font-size: 2.2rem;
+            font-weight: 900;
+            color: var(--acc-cyan);
+            line-height: 1;
+            text-shadow: 0 0 28px rgba(0,240,255,0.6);
+            letter-spacing: -0.02em;
+        }
+
+        .hero-stat-label {
+            display: block;
+            font-size: 0.65rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            margin-top: 6px;
+        }
+
+        @media (max-width: 900px) {
+            .hero-stats { gap: 20px; }
+            .hero-stat-num { font-size: 1.5rem; }
+        }
+
+        @media (max-width: 768px) {
+            .landing-hero { padding: 100px 24px 48px; min-height: 70vh; }
+            .hero-stats { display: none; }
+            .landing-hero h1 { font-size: 2.1rem; }
+        }
+
+        [data-theme="light"] .landing-hero h1 em {
+            background: linear-gradient(90deg, var(--acc-cyan), var(--acc-blue));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        [data-theme="light"] .hero-btn-primary { color: #fff; }
+
+        [data-theme="light"] .hero-btn-secondary {
+            background: rgba(0,0,0,0.04);
+            border-color: rgba(0,0,0,0.12);
+            color: var(--text-primary);
+        }
+
+        [data-theme="light"] .hero-btn-secondary:hover {
+            background: rgba(0,0,0,0.07);
+            border-color: var(--acc-cyan);
+        }
+
+        [data-theme="light"] .hero-stats {
+            background: rgba(255,255,255,0.75);
+            border-color: rgba(0,140,160,0.25);
+        }
+        [data-theme="light"] .hero-stat-num { text-shadow: none; }
+
+        /* ── FEATURES STRIP ─────────────────────────────────────────────── */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0;
+            border-top: 1px solid var(--glass-border);
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .feature-card {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            padding: 28px 32px;
+            border-right: 1px solid var(--glass-border);
+            border-radius: 0;
+            background: transparent;
+            transition: background 0.2s;
+        }
+
+        .feature-card:last-child { border-right: none; }
+        .feature-card:hover { background: rgba(0,240,255,0.025); transform: none; }
+
+        .feature-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            background: rgba(0,240,255,0.08);
+            border: 1px solid rgba(0,240,255,0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .feature-card h3 { font-size: 0.9rem; font-weight: 700; margin-bottom: 4px; }
+        .feature-card p { font-size: 0.8rem; color: var(--text-secondary); line-height: 1.5; }
+
+        @media (max-width: 768px) {
+            .features-grid { grid-template-columns: 1fr; }
+            .feature-card { border-right: none; border-bottom: 1px solid var(--glass-border); }
+            .feature-card:last-child { border-bottom: none; }
+        }
+
+        /* ── SERVICE CARDS ──────────────────────────────────────────────── */
+        .service-details { background: transparent; padding: 72px 20px; }
+
+        .section-title {
+            font-size: clamp(1.4rem, 3vw, 2rem);
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            margin-bottom: 8px;
+        }
+
+        .section-label {
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--acc-cyan);
+            margin-bottom: 8px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .section-hint {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            text-align: right;
+            max-width: 220px;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 600px) { .section-header { flex-direction: column; align-items: flex-start; } .section-hint { text-align: left; } }
+
+        .problem-card {
+            position: relative;
+            overflow: hidden;
+            transition: border-color 0.25s, transform 0.25s, background 0.25s;
+        }
+
+        .problem-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--acc-cyan), var(--acc-blue));
+            opacity: 0;
+            transition: opacity 0.25s;
+        }
+
+        .problem-card:hover::before { opacity: 1; }
+
+        .problem-card:hover {
+            border-color: rgba(0,240,255,0.25);
+            transform: translateY(-4px);
+            background: rgba(0,240,255,0.03);
+        }
+
+        .problem-list li {
+            border-radius: 7px;
+            padding: 7px 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.83rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: background 0.15s, color 0.15s;
+            list-style: none;
+        }
+
+        .problem-list li::before {
+            content: '';
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: var(--acc-cyan);
+            opacity: 0.5;
+            flex-shrink: 0;
+            transition: opacity 0.15s;
+        }
+
+        .problem-list li:hover,
+        .problem-list li:focus-visible {
+            background: rgba(0,240,255,0.07);
+            color: var(--text-primary);
+            outline: none;
+        }
+
+        .problem-list li:hover::before,
+        .problem-list li:focus-visible::before { opacity: 1; }
+
+        .card-cta {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 16px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: var(--acc-cyan);
+            opacity: 0;
+            transform: translateY(6px);
+            transition: opacity 0.22s, transform 0.22s;
+            pointer-events: none;
+        }
+
+        .problem-card:hover .card-cta { opacity: 1; transform: translateY(0); }
+
+        [data-theme="light"] .problem-card:hover { background: rgba(14,116,144,0.04); }
+
+        [data-theme="light"] .problem-list li:hover,
+        [data-theme="light"] .problem-list li:focus-visible {
+            background: rgba(14,116,144,0.06);
+        }
+    </style>
 </head>
 <body>
 
@@ -19,8 +403,8 @@
     </div>
     <div class="header-actions">
         <button id="theme-toggle" class="theme-toggle" aria-label="Cambiar tema">
-            <span class="icon-moon">🌙</span>
-            <span class="icon-sun">☀️</span>
+            <span class="icon-moon"><i data-lucide="moon"></i></span>
+            <span class="icon-sun"><i data-lucide="sun"></i></span>
         </button>
         <button class="nav-toggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="main-nav">
             <span></span><span></span><span></span>
@@ -30,84 +414,274 @@
         <a href="index.html">Inicio</a>
         <a href="index.html#services">Servicios</a>
         <a href="blog.html">Blog</a>
-        <a href="index.html#contact">Contacto</a>
     </nav>
 </header>
 
 <main>
-    <section class="landing-hero" style="background-image: linear-gradient(rgba(11, 15, 25, 0.7), rgba(11, 15, 25, 0.7)), url('img/tv.jpg');">
-        <span class="badge">Servicio Técnico Especializado</span>
-        <h1>Expertos en Reparación de Televisores</h1>
-        <p>Solucionamos fallos en LED, OLED, QLED y Smart TV con repuestos originales y garantía oficial.</p>
+    <section class="landing-hero hero-service" data-img="tv" aria-label="Reparación de Televisores">
+        <div class="hero-grid" aria-hidden="true"></div>
+        <span class="badge"><span class="badge-dot" aria-hidden="true"></span>Servicio Técnico Especializado</span>
+        <h1>Expertos en<br><em id="tw-target"></em><span id="tw-cursor" style="display:inline-block;width:2px;height:0.85em;background:var(--acc-cyan);margin-left:2px;vertical-align:middle;animation:blink 1s step-end infinite;"></span></h1>
+        <p>LED, OLED, QLED y Smart TV. Reparamos con piezas originales y garantía escrita para que vuelvas a disfrutar de tu pantalla.</p>
+        <div class="hero-actions">
+            <button class="hero-btn-primary" id="hero-cta" aria-label="Solicitar visita técnica">
+                <i data-lucide="calendar-check" aria-hidden="true"></i> Solicitar visita
+            </button>
+            <a href="reparalo.html" class="hero-btn-secondary">
+                <i data-lucide="wrench" aria-hidden="true"></i> AvantFix — hazlo tú mismo
+            </a>
+        </div>
+        <div class="hero-stats" aria-label="Estadísticas">
+            <div class="hero-stat">
+                <span class="hero-stat-num">24h</span>
+                <span class="hero-stat-label">Diagnóstico</span>
+            </div>
+            <div class="hero-stat">
+                <span class="hero-stat-num">+800</span>
+                <span class="hero-stat-label">TVs reparados</span>
+            </div>
+        </div>
     </section>
 
-    <div class="features-grid">
-        <div class="feature-card">
-            <div class="feature-icon">⚡</div>
-            <h3>Reparación Rápida</h3>
-            <p>Diagnóstico en menos de 24 horas para que no te pierdas tus programas favoritos.</p>
+    <div class="features-grid" role="list" aria-label="Ventajas del servicio">
+        <div class="feature-card" role="listitem">
+            <div class="feature-icon" aria-hidden="true"><i data-lucide="zap"></i></div>
+            <div>
+                <h3>Diagnóstico Rápido</h3>
+                <p>En menos de 24 horas sabrás qué tiene tu tele y cuánto cuesta arreglarlo.</p>
+            </div>
         </div>
-        <div class="feature-card">
-            <div class="feature-icon">🛡️</div>
-            <h3>Garantía Oficial</h3>
-            <p>Todas nuestras reparaciones incluyen garantía por escrito en piezas y mano de obra.</p>
+        <div class="feature-card" role="listitem">
+            <div class="feature-icon" aria-hidden="true"><i data-lucide="shield-check"></i></div>
+            <div>
+                <h3>Garantía por Escrito</h3>
+                <p>Todas nuestras reparaciones incluyen garantía en piezas y mano de obra.</p>
+            </div>
         </div>
-        <div class="feature-card">
-            <div class="feature-icon">🛠️</div>
-            <h3>Piezas Originales</h3>
-            <p>Utilizamos componentes certificados de marcas como Samsung, LG, Sony y Philips.</p>
+        <div class="feature-card" role="listitem">
+            <div class="feature-icon" aria-hidden="true"><i data-lucide="wrench"></i></div>
+            <div>
+                <h3>Piezas Originales</h3>
+                <p>Componentes certificados de Samsung, LG, Sony y Philips para que dure más.</p>
+            </div>
         </div>
     </div>
 
     <section class="service-details">
         <div class="details-container">
-            <h2 class="section-title">¿Qué problemas solucionamos?</h2>
-            <div class="service-container">
-                <div class="service">
-                    <div class="service-header">
-                        <h3>Problemas de Imagen</h3>
-                        <span class="toggle-icon"></span>
-                    </div>
-                    <div class="service-body">
-                        <p>Pantallas negras con sonido, líneas verticales/horizontales, falta de brillo (backlight) o colores distorsionados.</p>
-                    </div>
+            <div class="section-header">
+                <div>
+                    <div class="section-label">Televisores</div>
+                    <h2 class="section-title">¿Qué problema tiene tu TV?</h2>
                 </div>
-                <div class="service">
-                    <div class="service-header">
-                        <h3>Problemas de Encendido</h3>
-                        <span class="toggle-icon"></span>
-                    </div>
-                    <div class="service-body">
-                        <p>El televisor no enciende, el LED de standby parpadea o se apaga solo repentinamente.</p>
-                    </div>
-                </div>
-                <div class="service">
-                    <div class="service-header">
-                        <h3>Software y Conectividad</h3>
-                        <span class="toggle-icon"></span>
-                    </div>
-                    <div class="service-body">
-                        <p>Actualización de firmware, problemas con el Wi-Fi, aplicaciones que no cargan o errores de Smart TV.</p>
-                    </div>
-                </div>
+                <p class="section-hint">Haz clic en cualquier avería para pedir visita técnica</p>
             </div>
-
-            <div class="price-box">
-                <p><strong>Presupuesto sin compromiso:</strong> Realizamos una valoración previa antes de cualquier intervención.</p>
+            <div class="problems-grid">
+                <div class="problem-card" data-servicio="Televisores" data-sub="Problemas de Imagen">
+                    <div class="problem-card-icon" aria-hidden="true"><i data-lucide="monitor"></i></div>
+                    <h3>Problemas de Imagen</h3>
+                    <ul class="problem-list" aria-label="Problemas de imagen en televisores">
+                        <li data-problema="fallo-electrico" tabindex="0">Pantalla negra con sonido</li>
+                        <li data-problema="fallo-electrico" tabindex="0">Líneas verticales u horizontales</li>
+                        <li data-problema="fallo-electrico" tabindex="0">Falta de brillo (backlight)</li>
+                        <li data-problema="fallo-electrico" tabindex="0">Colores distorsionados o manchas</li>
+                    </ul>
+                    <div class="card-cta" aria-hidden="true">Solicitar este servicio <i data-lucide="arrow-right"></i></div>
+                </div>
+                <div class="problem-card" data-servicio="Televisores" data-sub="Problemas de Encendido">
+                    <div class="problem-card-icon" aria-hidden="true"><i data-lucide="zap"></i></div>
+                    <h3>Problemas de Encendido</h3>
+                    <ul class="problem-list" aria-label="Problemas de encendido en televisores">
+                        <li data-problema="fallo-electrico" tabindex="0">El televisor no enciende</li>
+                        <li data-problema="fallo-electrico" tabindex="0">LED de standby parpadea</li>
+                        <li data-problema="fallo-electrico" tabindex="0">Se apaga solo repentinamente</li>
+                        <li data-problema="fallo-electrico" tabindex="0">Fallo en fuente de alimentación</li>
+                    </ul>
+                    <div class="card-cta" aria-hidden="true">Solicitar este servicio <i data-lucide="arrow-right"></i></div>
+                </div>
+                <div class="problem-card" data-servicio="Televisores" data-sub="Software y Conectividad">
+                    <div class="problem-card-icon" aria-hidden="true"><i data-lucide="wifi"></i></div>
+                    <h3>Software y Conectividad</h3>
+                    <ul class="problem-list" aria-label="Problemas de software y conectividad en televisores">
+                        <li data-problema="error-software" tabindex="0">Actualización de firmware fallida</li>
+                        <li data-problema="error-software" tabindex="0">Wi-Fi que no conecta</li>
+                        <li data-problema="error-software" tabindex="0">Apps que no cargan (Netflix, YouTube…)</li>
+                        <li data-problema="error-software" tabindex="0">Errores del sistema Smart TV</li>
+                    </ul>
+                    <div class="card-cta" aria-hidden="true">Solicitar este servicio <i data-lucide="arrow-right"></i></div>
+                </div>
             </div>
         </div>
     </section>
-
-
 </main>
+
+<!-- MODAL DE CONTACTO -->
+<div id="contact-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal-box">
+        <div class="modal-header">
+            <button class="modal-close" id="modal-close-btn" aria-label="Cerrar"><i data-lucide="x"></i></button>
+            <div class="modal-service-tag" id="modal-service-tag"><i data-lucide="clipboard-list"></i> Servicio general</div>
+            <div class="modal-title" id="modal-title">Solicitar Servicio</div>
+            <div class="modal-subtitle">Un técnico se pondrá en contacto contigo en menos de 48h</div>
+            <a href="reparalo.html" class="avantfix-banner" style="margin-top:18px;">
+                <div class="avantfix-banner-icon"><i data-lucide="wrench"></i></div>
+                <div class="avantfix-banner-text">
+                    <span class="avantfix-banner-title">¿Prefieres intentarlo tú mismo?</span>
+                    <span class="avantfix-banner-sub">Usa AvantFix y te orientamos paso a paso sin coste</span>
+                </div>
+                <span class="avantfix-banner-arrow">→</span>
+            </a>
+        </div>
+        <div class="modal-divider"></div>
+        <div class="modal-body">
+            <form id="contactForm" action="http://localhost:3000/contacto" method="POST" class="avant-form">
+                <input type="hidden" name="origen_sitio" value="AVANTSERVICE">
+                <input type="hidden" id="modal-hidden-sub" name="subapartado" value="">
+                <div class="form-grid">
+                    <div class="input-group">
+                        <label for="input-nombre">Nombre</label>
+                        <input id="input-nombre" type="text" name="nombre" placeholder="Tu nombre" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="input-apellido">Apellido</label>
+                        <input id="input-apellido" type="text" name="apellido" placeholder="Tu apellido" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="input-email">Correo Electrónico</label>
+                        <input id="input-email" type="email" name="email" placeholder="ejemplo@correo.com" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="input-telefono">Teléfono</label>
+                        <input id="input-telefono" type="tel" name="telefono" placeholder="+34 000 000 000">
+                    </div>
+                    <div class="input-group full-width">
+                        <label for="input-producto">Producto Relacionado</label>
+                        <input id="input-producto" type="text" name="producto" placeholder="Escribe el nombre del producto..." required>
+                    </div>
+                    <div class="input-group full-width">
+                        <label for="modal-problema">Tipo de Consulta o Problema</label>
+                        <select id="modal-problema" name="problema" required>
+                            <option value="" disabled selected>¿En qué podemos ayudarte?</option>
+                            <option value="error-software">Error en la configuración del software / SmartThings</option>
+                            <option value="fallo-electrico">El equipo no enciende o tiene fallos eléctricos</option>
+                            <option value="ruido-extrano">Emite ruidos extraños durante el funcionamiento</option>
+                            <option value="garantia">Consulta sobre la cobertura de garantía oficial</option>
+                            <option value="piezas-recambio">Necesito comprar piezas de recambio oficiales</option>
+                            <option value="otros">Otros problemas técnicos</option>
+                        </select>
+                    </div>
+                    <div class="input-group full-width">
+                        <label for="input-mensaje">Mensaje Adicional</label>
+                        <textarea id="input-mensaje" name="mensaje" rows="3" placeholder="Explícanos brevemente tu situación..."></textarea>
+                    </div>
+                </div>
+                <button type="submit" class="btn-submit">Enviar solicitud</button>
+                <div class="confirm-banner" id="modal-confirm">
+                    <span class="confirm-banner-icon"><i data-lucide="circle-check"></i></span>
+                    <div class="confirm-banner-body">
+                        <span class="confirm-banner-title">¡Solicitud enviada!</span>
+                        <span class="confirm-banner-text">Nos pondremos en contacto contigo en un plazo máximo de 48 horas laborables.</span>
+                    </div>
+                </div>
+            </form>
+            <p style="margin-top:16px;font-size:0.78rem;color:var(--text-secondary);text-align:center;line-height:1.6;">
+                <i data-lucide="lock" aria-hidden="true"></i> Tus datos están protegidos y nunca serán cedidos a terceros.
+            </p>
+        </div>
+    </div>
+</div>
 
 <footer>
     <p>&copy; 2026 AvantService - Soluciones Tecnológicas de Vanguardia</p>
 </footer>
 
+<script>
+(function() {
+    var modal      = document.getElementById('contact-modal');
+    var closeBtn   = document.getElementById('modal-close-btn');
+    var serviceTag = document.getElementById('modal-service-tag');
+    var hiddenSub  = document.getElementById('modal-hidden-sub');
+    var selectProb = document.getElementById('modal-problema');
+
+    function openModal(servicio, sub, detalle, problema) {
+        var label = servicio + ' · ' + sub;
+        if (detalle) label += ' · ' + detalle;
+        serviceTag.innerHTML = '<i data-lucide="clipboard-list"></i> ' + label;
+        lucide.createIcons({ nodes: [serviceTag] });
+        hiddenSub.value = detalle || sub;
+        if (problema && selectProb.querySelector('option[value="' + problema + '"]')) {
+            selectProb.value = problema;
+        }
+        modal.classList.add('open');
+        document.body.style.overflow = 'hidden';
+        modal.querySelector('input[name="nombre"]').focus();
+    }
+
+    function closeModal() {
+        modal.classList.remove('open');
+        document.body.style.overflow = '';
+    }
+
+    document.querySelectorAll('.problem-list li').forEach(function(li) {
+        function trigger() {
+            var card = li.closest('.problem-card');
+            openModal(card.dataset.servicio, card.dataset.sub, li.textContent.trim(), li.dataset.problema);
+        }
+        li.addEventListener('click', trigger);
+        li.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); trigger(); }
+        });
+    });
+
+    document.getElementById('hero-cta').addEventListener('click', function() {
+        openModal('Televisores', 'Consulta general', '', '');
+    });
+
+    closeBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', function(e) { if (e.target === modal) closeModal(); });
+    document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeModal(); });
+
+    document.getElementById('contactForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        var form = this;
+        var confirm = document.getElementById('modal-confirm');
+        var submitBtn = form.querySelector('.btn-submit');
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Enviando…';
+        fetch(form.action, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(Object.fromEntries(new FormData(form))) })
+            .then(function() {
+                confirm.classList.add('visible');
+                form.reset();
+                submitBtn.style.display = 'none';
+                setTimeout(closeModal, 3200);
+            })
+            .catch(function() {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Enviar solicitud';
+                alert('Error al enviar. Por favor, inténtalo de nuevo.');
+            });
+    });
+})();
+</script>
 <script src="script.js"></script>
+<script>var h=document.querySelector('.hero-service');if(h)h.style.setProperty('--hero-bg','url("img/tv.jpg")');</script>
 <script src="theme.js"></script>
 <script src="nav.js"></script>
 <script src="tracker.js"></script>
+<script>lucide.createIcons();</script>
+<script>
+(function () {
+  var word = 'Televisores';
+  var el = document.getElementById('tw-target');
+  var i = 0;
+  function type() {
+    if (i <= word.length) {
+      el.textContent = word.slice(0, i++);
+      setTimeout(type, 80);
+    }
+  }
+  setTimeout(type, 600);
+})();
+</script>
 </body>
 </html>

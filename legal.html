@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@400;600;700&display=swap">
     <link rel="stylesheet" href="services.css">
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
     <style>
         .legal-wrap {
             max-width: 760px;
@@ -95,8 +96,8 @@
     </div>
     <div class="header-actions">
         <button id="theme-toggle" class="theme-toggle" aria-label="Cambiar tema">
-            <span class="icon-moon">🌙</span>
-            <span class="icon-sun">☀️</span>
+            <span class="icon-moon"><i data-lucide="moon"></i></span>
+            <span class="icon-sun"><i data-lucide="sun"></i></span>
         </button>
         <button class="nav-toggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="main-nav">
             <span></span><span></span><span></span>
@@ -106,7 +107,6 @@
         <a href="index.html">Inicio</a>
         <a href="index.html#services">Servicios</a>
         <a href="blog.html">Blog</a>
-        <a href="index.html#contact">Contacto</a>
     </nav>
 </header>
 
@@ -118,7 +118,7 @@
         <p class="legal-subtitle">Última actualización: abril de 2026</p>
 
         <div class="legal-notice">
-            ⚠️ Los campos marcados con <strong>[COMPLETAR]</strong> deben ser rellenados con los datos reales de la empresa antes de publicar este documento.
+            <i data-lucide="alert-triangle"></i> Los campos marcados con <strong>[COMPLETAR]</strong> deben ser rellenados con los datos reales de la empresa antes de publicar este documento.
         </div>
 
         <!-- 1. TITULAR -->
@@ -240,5 +240,6 @@
 
 <script src="theme.js"></script>
 <script src="nav.js"></script>
+<script>lucide.createIcons();</script>
 </body>
 </html>

@@ -1,4 +1,5 @@
 (function () {
+
     var toggle = document.querySelector('.nav-toggle');
     var nav    = document.getElementById('main-nav');
     if (!toggle || !nav) return;

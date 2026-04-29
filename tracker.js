@@ -1,7 +1,7 @@
 ;(function () {
   'use strict';
 
-  var TRACK_URL = 'http://localhost/backendavant/api.php?r=track';
+  var TRACK_URL = 'http://localhost:3000/api/track';
 
   // ── IDs ────────────────────────────────────────────────────────────────────
 
@@ -107,7 +107,7 @@
     device:       getDevice(),
     screen_w:     screen.width,
     screen_h:     screen.height,
-    landing_page: window.location.href,
+    landing_page: window.location.pathname,
   }, getUTMs()));
 
   // ── Update on leave ────────────────────────────────────────────────────────
