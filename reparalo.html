@@ -53,7 +53,7 @@
         }
 
         [data-theme="light"] .diy-page-title .avant {
-            background: linear-gradient(90deg, #9333ea, #0891b2);
+            background: linear-gradient(90deg, #ffaa00, #dc2626);
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -61,8 +61,28 @@
         }
 
         [data-theme="light"] .diy-title-badge {
-            border-color: rgba(14,116,144,0.35);
-            background: rgba(14,116,144,0.07);
+            border-color: rgba(255,170,0,0.35);
+            background: rgba(255,170,0,0.07);
+        }
+
+        [data-theme="light"] .diy-diff-btn:hover { border-color: rgba(255,170,0,0.3); }
+        [data-theme="light"] .diy-diff-btn.active {
+            border-color: var(--acc-cyan);
+            background: rgba(255,170,0,0.06);
+        }
+
+        [data-theme="light"] #legal-gate {
+            border-color: rgba(255,170,0,0.2);
+            background: rgba(255,170,0,0.03);
+        }
+
+        [data-theme="light"] .diy-send-btn {
+            background: linear-gradient(135deg, #dc2626, #ffaa00);
+        }
+
+        [data-theme="light"] .diy-fields input,
+        [data-theme="light"] .diy-fields textarea {
+            color: var(--text-primary);
         }
 
         .diy-page-subtitle {
@@ -249,10 +269,10 @@
 <body>
 
 <header>
-    <div class="logo-group">
+    <a href="index.html" class="logo-group">
         <img src="logo.svg" width="60px" alt="AvantService">
         <h1>AvantService</h1>
-    </div>
+    </a>
     <div class="header-actions">
         <button id="theme-toggle" class="theme-toggle" aria-label="Cambiar tema">
             <span class="icon-moon"><i data-lucide="moon"></i></span>
@@ -349,17 +369,7 @@
         </div>
     </div>
 
-    <div id="legal-gate" style="
-        border:1px solid rgba(0,240,255,0.2);
-        border-radius:12px;
-        padding:16px 20px;
-        background:rgba(0,240,255,0.03);
-        display:flex;
-        align-items:center;
-        gap:14px;
-        font-size:0.85rem;
-        line-height:1.5;
-    ">
+    <div id="legal-gate" style="border:1px solid rgba(0,240,255,0.2);border-radius:12px;padding:16px 20px;background:rgba(0,240,255,0.03);display:flex;align-items:center;gap:14px;font-size:0.85rem;line-height:1.5;">
         <i data-lucide="shield-alert" style="width:22px;height:22px;stroke:var(--acc-cyan);flex-shrink:0;"></i>
         <span>Para enviar tu consulta debes leer y aceptar el <a href="legal.html" style="color:var(--acc-cyan);font-weight:700;text-decoration:underline;">Aviso Legal completo</a>. El botón de envío se desbloqueará una vez lo hayas aceptado.</span>
     </div>
@@ -463,7 +473,7 @@ sendBtn.addEventListener('click', function() {
             <address>
                 Calle Ibáñez Marín, 2<br>
                 52003 Melilla, España<br>
-                Tel. <a href="tel:+34627640464" style="color:inherit;text-decoration:none;">627 64 04 64</a>
+                Tel. <a href="tel:+34622585203" style="color:inherit;text-decoration:none;">622585203</a>
             </address>
         </div>
         <div class="footer-col">
@@ -488,7 +498,7 @@ sendBtn.addEventListener('click', function() {
             <h4>Contacto</h4>
             <ul>
                 <li><a href="mailto:soporte@avantelite.es">soporte@avantelite.es</a></li>
-                <li><a href="tel:+34627640464">627 64 04 64</a></li>
+                <li><a href="tel:+34622585203">622585203</a></li>
             </ul>
         </div>
     </div>

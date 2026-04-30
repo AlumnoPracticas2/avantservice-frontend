@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@400;600;700&display=swap">
     <link rel="stylesheet" href="services.css">
+    <script>try{var t=localStorage.getItem("avantservice-theme");if(t==="light")document.documentElement.setAttribute("data-theme","light");}catch(e){}</script>
     <script src="https://unpkg.com/lucide@1.14.0/dist/umd/lucide.min.js" integrity="sha384-jB6ZXxyEV94yzTxgLMvrwwNbn/pTTqwrMDI+v8FV5o5FnId/yn3DJwSdrDujU9A7" crossorigin="anonymous"></script>
     <style>
         /* ── UTILIDADES ──────────────────────────────────────────────────── */
@@ -275,7 +276,7 @@
             border-color: rgba(0, 240, 255, 0.5);
             transform: translateY(-3px);
             box-shadow: 0 8px 20px rgba(0, 240, 255, 0.15);
-            color: #fff;
+            color: #adfaff;
         }
 
         .btn-subcategories:hover::before {
@@ -456,15 +457,7 @@
             transform: translateX(4px);
         }
 
-        [data-theme="light"] .avantfix-banner {
-            border-color: rgba(14,116,144,0.25);
-            background: rgba(14,116,144,0.04);
-        }
-
-        [data-theme="light"] .avantfix-banner:hover {
-            background: rgba(14,116,144,0.08);
-            border-color: rgba(14,116,144,0.45);
-        }
+        /* overrides moved to light-mode block below */
 
         /* ── BLOGS RECIENTES ─────────────────────────────────────────────── */
         .recent-blog-section {
@@ -720,8 +713,121 @@
           opacity: 0.3;
         }
         [data-theme="light"] #particle-canvas {
-          opacity: 0.5 !important;
+          opacity: 0.85 !important;
         }
+
+        /* ── Light mode overrides (hardcoded cyan/blue → orange/red) ────── */
+        [data-theme="light"] .sub-item.open { border-color: rgba(255,170,0,0.3); }
+        [data-theme="light"] .sub-item-header:hover { background: rgba(255,170,0,0.04); }
+        [data-theme="light"] .sub-item.open .sub-item-header { background: rgba(255,170,0,0.05); }
+        [data-theme="light"] .sub-service-icon-wrap {
+            background: rgba(255,170,0,0.08);
+            border-color: rgba(255,170,0,0.15);
+        }
+        [data-theme="light"] .sub-item:hover .sub-service-icon-wrap { background: rgba(255,170,0,0.14); }
+        [data-theme="light"] .sub-child-btn:hover { background: rgba(255,170,0,0.06); }
+        [data-theme="light"] .btn-subcategories {
+            background: rgba(255,170,0,0.08);
+            border-color: rgba(255,170,0,0.25);
+        }
+        [data-theme="light"] .btn-subcategories:hover {
+            background: rgba(255,170,0,0.15);
+            border-color: rgba(255,170,0,0.5);
+            box-shadow: 0 8px 20px rgba(255,170,0,0.15);
+            color: #ff8533;
+        }
+        [data-theme="light"] .modal-close:hover {
+            background: rgba(255,170,0,0.08);
+            border-color: rgba(255,170,0,0.35);
+        }
+        [data-theme="light"] .modal-service-tag {
+            background: rgba(255,170,0,0.07);
+            border-color: rgba(255,170,0,0.2);
+        }
+        [data-theme="light"] .avantfix-banner {
+            border-color: rgba(255,170,0,0.25);
+            background: rgba(255,170,0,0.04);
+        }
+        [data-theme="light"] .avantfix-banner:hover {
+            background: rgba(255,170,0,0.08);
+            border-color: rgba(255,170,0,0.45);
+        }
+        .avantfix-banner-title {
+            background: linear-gradient(90deg, #00f0ff, #0057ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            color: transparent;
+        }
+        [data-theme="light"] .avantfix-banner-title {
+            background: linear-gradient(90deg, #ffaa00, #dc2626);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            color: transparent;
+        }
+        [data-theme="light"] .avantfix-hero-link {
+            background: linear-gradient(90deg, #ffaa00, #dc2626);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            color: transparent;
+            border-bottom-color: #ffaa00;
+            opacity: 1;
+            filter: drop-shadow(0 1px 3px rgba(0,0,0,0.25));
+        }
+        [data-theme="light"] .rb-card:hover { border-color: rgba(255,170,0,0.3); }
+        [data-theme="light"] .rb-card-img {
+            background: linear-gradient(135deg, rgba(220,38,38,0.15), rgba(255,170,0,0.1));
+        }
+        [data-theme="light"] .rb-card.rb-featured .rb-card-img::after {
+            color: var(--acc-cyan);
+            background: rgba(255,170,0,0.08);
+            border-color: rgba(255,170,0,0.2);
+        }
+        [data-theme="light"] .rb-card-cat {
+            background: rgba(255,170,0,0.08);
+            border-color: rgba(255,170,0,0.2);
+        }
+        [data-theme="light"] .service::after {
+            background: linear-gradient(90deg, var(--acc-cyan), #dc2626);
+        }
+        [data-theme="light"] .service:hover {
+            border-color: rgba(255,170,0,0.3);
+            box-shadow: 0 12px 30px rgba(255,170,0,0.1);
+        }
+        [data-theme="light"] .cyan { text-shadow: none; font-weight: 700; }
+        #typewriter-target {
+            background: linear-gradient(90deg, #00f0ff, #0057ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            color: transparent;
+        }
+        #typewriter-cursor {
+            background: #00f0ff;
+        }
+        [data-theme="light"] #typewriter-target {
+            background: linear-gradient(90deg, #ffaa00, #dc2626);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        [data-theme="light"] #typewriter-cursor {
+            background: #ffaa00;
+        }
+        .avantfix-hero-link {
+            font-weight: 700;
+            text-decoration: none;
+            border-bottom: 1px solid #00f0ff;
+            background: linear-gradient(90deg, #00f0ff, #0057ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            color: transparent;
+            transition: opacity 0.2s;
+        }
+        .avantfix-hero-link:hover { opacity: 0.8; }
 
         /* Blog cards — revealed state handled via inline style clearing in scrollObserver */
     </style>
@@ -731,10 +837,10 @@
 <canvas id="particle-canvas" style="position:fixed;inset:0;pointer-events:none;z-index:0;opacity:0.45;"></canvas>
 
 <header>
-    <div class="logo-group">
+    <a href="index.html" class="logo-group">
         <img src="logo.svg" width="60px" alt="AvantService">
         <h1>AvantService</h1>
-    </div>
+    </a>
     <div class="header-actions">
         <button id="theme-toggle" class="theme-toggle" aria-label="Cambiar tema">
             <span class="icon-moon"><i data-lucide="moon"></i></span>
@@ -753,8 +859,8 @@
 
 <section class="hero">
     <div class="hero-glow" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:500px;height:200px;background:radial-gradient(ellipse,rgba(0,240,255,0.08) 0%,transparent 70%);pointer-events:none;animation:breathe 4s ease-in-out infinite;"></div>
-    <h2>Soluciones <span id="typewriter-target" style="color:var(--acc-cyan);text-shadow:0 0 30px rgba(0,240,255,0.5)"></span><span id="typewriter-cursor" style="display:inline-block;width:2px;height:0.9em;background:var(--acc-cyan);margin-left:2px;vertical-align:middle;animation:blink 1s step-end infinite;"></span><br>para tu hogar</h2>
-    <p>En AvantService ofrecemos servicios de alta calidad adaptados a tus necesidades. ¿Prefieres intentarlo tú mismo? Prueba <a href="reparalo.html" style="color:var(--acc-cyan);font-weight:700;text-decoration:none;border-bottom:1px solid rgba(0,240,255,0.4);transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--acc-cyan)'" onmouseout="this.style.borderColor='rgba(0,240,255,0.4)'">AvantFix</a>, nuestra guía gratuita de reparación paso a paso.</p>
+    <h2>Soluciones <span id="typewriter-target"></span><span id="typewriter-cursor" style="display:inline-block;width:2px;height:0.9em;background:var(--acc-cyan);margin-left:2px;vertical-align:middle;animation:blink 1s step-end infinite;"></span><br>para tu hogar</h2>
+    <p>En AvantService ofrecemos servicios de alta calidad adaptados a tus necesidades. ¿Prefieres intentarlo tú mismo? Prueba <a href="reparalo.html" class="avantfix-hero-link">AvantFix</a>, nuestra guía gratuita de reparación paso a paso.</p>
 </section>
 
 <section id="services" class="services">
@@ -1059,7 +1165,7 @@
             <address>
                 Calle Ibáñez Marín, 2<br>
                 52003 Melilla, España<br>
-                Tel. <a href="tel:+34627640464" style="color:inherit;text-decoration:none;">627 64 04 64</a>
+                Tel. <a href="tel:+34622585203" style="color:inherit;text-decoration:none;">622585203</a>
             </address>
         </div>
         <div class="footer-col">
@@ -1084,7 +1190,7 @@
             <h4>Contacto</h4>
             <ul>
                 <li><a href="mailto:soporte@avantelite.es">soporte@avantelite.es</a></li>
-                <li><a href="tel:+34627640464">627 64 04 64</a></li>
+                <li><a href="tel:+34622585203">622585203</a></li>
             </ul>
         </div>
     </div>
@@ -1397,13 +1503,13 @@ document.querySelectorAll('.service').forEach(function (el) {
     return {
       x: Math.random() * canvas.width,
       y: Math.random() * canvas.height,
-      r: Math.random() * 1.8 + 0.4,
+      r: Math.random() * 2.4 + 0.6,
       vx: (Math.random() - 0.5) * 0.3,
       vy: -(Math.random() * 0.4 + 0.1),
-      alpha: Math.random() * 0.6 + 0.2,
+      alpha: Math.random() * 0.75 + 0.35,
       color: (function() {
         var light = document.documentElement.getAttribute('data-theme') === 'light';
-        if (light) return Math.random() > 0.6 ? '0,140,180' : '30,80,200';
+        if (light) return Math.random() > 0.6 ? '255,122,0' : '220,38,38';
         return Math.random() > 0.6 ? '0,240,255' : '0,87,255';
       })(),
       life: 0,
