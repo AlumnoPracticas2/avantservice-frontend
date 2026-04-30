@@ -26,8 +26,8 @@ if (_cf) _cf.addEventListener('submit', function (e) {
     // Limpiar clases previas del panel
     panel.className = 'confirmation-panel';
 
-    // Intentar enviar al servidor PHP (MySQL)
-    fetch('guardar_contacto.php', {
+    var endpoint = (typeof AVANTSERVICE_CONFIG !== 'undefined') ? AVANTSERVICE_CONFIG.API_CONTACT : 'http://localhost:3000/contacto';
+    fetch(endpoint, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
