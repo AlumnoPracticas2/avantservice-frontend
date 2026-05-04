@@ -7,6 +7,7 @@ var AVANTSERVICE_CONFIG = (function () {
         API_BLOG:    BASE_URL + '/api/blog',
         API_CONTACT: BASE_URL + '/contacto',
         API_TRACK:   BASE_URL + '/api/track',
-        API_BUDGET:  BASE_URL + '/api/presupuesto',
+        API_BUDGET:   BASE_URL + '/api/presupuesto',
+        API_SERVICIOS: BASE_URL + '/api/servicios',
     };
 })();

@@ -488,41 +488,7 @@
                 </div>
                 <p class="section-hint">Haz clic en cualquier avería para pedir visita técnica</p>
             </div>
-            <div class="problems-grid">
-                <div class="problem-card" data-servicio="Calderas y Calefacción" data-sub="Calderas de Gas y Gasoil">
-                    <div class="problem-card-icon" aria-hidden="true"><i data-lucide="fuel"></i></div>
-                    <h3>Calderas de Gas y Gasoil</h3>
-                    <ul class="problem-list" aria-label="Servicios de calderas de gas y gasoil">
-                        <li data-problema="otros" tabindex="0">Limpieza de quemadores</li>
-                        <li data-problema="fallo-electrico" tabindex="0">Reparación de bombas de circulación</li>
-                        <li data-problema="fuga-agua" tabindex="0">Sustitución de vasos de expansión</li>
-                        <li data-problema="fallo-electrico" tabindex="0">Errores en el panel digital</li>
-                    </ul>
-                    <div class="card-cta" aria-hidden="true">Solicitar este servicio <i data-lucide="arrow-right"></i></div>
-                </div>
-                <div class="problem-card" data-servicio="Calderas y Calefacción" data-sub="Radiadores y Circuitos">
-                    <div class="problem-card-icon" aria-hidden="true"><i data-lucide="waves"></i></div>
-                    <h3>Radiadores y Circuitos</h3>
-                    <ul class="problem-list" aria-label="Servicios de radiadores y circuitos">
-                        <li data-problema="otros" tabindex="0">Purgado de sistemas</li>
-                        <li data-problema="ruido-extrano" tabindex="0">Eliminación de ruidos en tuberías</li>
-                        <li data-problema="fuga-agua" tabindex="0">Reparación de fugas de agua</li>
-                        <li data-problema="otros" tabindex="0">Equilibrado de calor en la vivienda</li>
-                    </ul>
-                    <div class="card-cta" aria-hidden="true">Solicitar este servicio <i data-lucide="arrow-right"></i></div>
-                </div>
-                <div class="problem-card" data-servicio="Calderas y Calefacción" data-sub="Termostatos Inteligentes">
-                    <div class="problem-card-icon" aria-hidden="true"><i data-lucide="thermometer"></i></div>
-                    <h3>Termostatos Inteligentes</h3>
-                    <ul class="problem-list" aria-label="Servicios de termostatos inteligentes">
-                        <li data-problema="montaje" tabindex="0">Instalación de termostatos Wifi</li>
-                        <li data-problema="error-software" tabindex="0">Configuración desde el móvil</li>
-                        <li data-problema="error-software" tabindex="0">Programación de horarios</li>
-                        <li data-problema="error-software" tabindex="0">Integración con asistentes de voz</li>
-                    </ul>
-                    <div class="card-cta" aria-hidden="true">Solicitar este servicio <i data-lucide="arrow-right"></i></div>
-                </div>
-            </div>
+            <div class="problems-grid" id="problems-grid"></div>
         </div>
     </section>
 </main>
@@ -736,6 +702,61 @@
 
     function showError(el, msg) { if (el) { el.textContent = msg; el.style.display = 'block'; } }
     function hideError(el) { if (el) { el.style.display = 'none'; el.textContent = ''; } }
+
+    (function() {
+        var NOMBRE_SERVICIO = 'Calderas y Calefacción';
+        var grid = document.getElementById('problems-grid');
+        if (!grid) return;
+        var apiUrl = (typeof AVANTSERVICE_CONFIG !== 'undefined') ? AVANTSERVICE_CONFIG.API_SERVICIOS : 'http://localhost:3000/api/servicios';
+
+        function buildCard(sub) {
+            var liHTML = '';
+            if (!sub.es_directo && sub.opciones && sub.opciones.length) {
+                liHTML = '<ul class="problem-list" aria-label="' + esc(sub.nombre) + '">' +
+                    sub.opciones.map(function(op) {
+                        return '<li data-problema="' + esc(op.tipo_problema) + '" tabindex="0">' + esc(op.texto) + '</li>';
+                    }).join('') + '</ul>';
+            }
+            return '<div class="problem-card"' +
+                ' data-servicio="' + esc(NOMBRE_SERVICIO) + '"' +
+                ' data-sub="' + esc(sub.nombre) + '"' +
+                (sub.es_directo ? ' data-directo="1"' : '') + '>' +
+                '<div class="problem-card-icon" aria-hidden="true"><i data-lucide="' + esc(sub.icono || 'wrench') + '"></i></div>' +
+                '<h3>' + esc(sub.nombre) + '</h3>' +
+                liHTML +
+                '<div class="card-cta" aria-hidden="true">Solicitar este servicio <i data-lucide="arrow-right"></i></div>' +
+                '</div>';
+        }
+
+        function initCards() {
+            grid.querySelectorAll('.problem-list li').forEach(function(li) {
+                li.addEventListener('click', function() {
+                    var card = li.closest('.problem-card');
+                    openModal(card.dataset.servicio, card.dataset.sub, li.textContent.trim(), li.dataset.problema);
+                });
+                li.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); li.click(); }
+                });
+            });
+            grid.querySelectorAll('.problem-card[data-directo]').forEach(function(card) {
+                card.style.cursor = 'pointer';
+                card.addEventListener('click', function() {
+                    openModal(card.dataset.servicio, card.dataset.sub, '', '');
+                });
+            });
+        }
+
+        fetch(apiUrl)
+            .then(function(r) { return r.json(); })
+            .then(function(servicios) {
+                var srv = servicios.find(function(s) { return s.nombre === NOMBRE_SERVICIO; });
+                if (!srv || !srv.subservicios || !srv.subservicios.length) return;
+                grid.innerHTML = srv.subservicios.map(buildCard).join('');
+                lucide.createIcons({ nodes: [grid] });
+                initCards();
+            })
+            .catch(function() {});
+    })();
 })();
 </script>
 <script>var h=document.querySelector('.hero-service');if(h)h.style.setProperty('--hero-bg','url("img/calderas.jpg")');</script>

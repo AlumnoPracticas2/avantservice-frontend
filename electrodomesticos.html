@@ -476,41 +476,7 @@
                 </div>
                 <p class="section-hint">Haz clic en cualquier avería para pedir visita técnica</p>
             </div>
-            <div class="problems-grid">
-                <div class="problem-card" data-servicio="Electrodomésticos" data-sub="Lavadoras y Secadoras">
-                    <div class="problem-card-icon" aria-hidden="true"><i data-lucide="washing-machine"></i></div>
-                    <h3>Lavadoras y Secadoras</h3>
-                    <ul class="problem-list" aria-label="Servicios de lavadoras y secadoras">
-                        <li data-problema="fuga-agua" tabindex="0">Cambio de gomas y juntas</li>
-                        <li data-problema="fuga-agua" tabindex="0">Reparación de bombas de desagüe</li>
-                        <li data-problema="fallo-electrico" tabindex="0">Fallos en el motor o centrifugado</li>
-                        <li data-problema="fallo-electrico" tabindex="0">Errores de placa base</li>
-                    </ul>
-                    <div class="card-cta" aria-hidden="true">Solicitar este servicio <i data-lucide="arrow-right"></i></div>
-                </div>
-                <div class="problem-card" data-servicio="Electrodomésticos" data-sub="Frigoríficos y Congeladores">
-                    <div class="problem-card-icon" aria-hidden="true"><i data-lucide="refrigerator"></i></div>
-                    <h3>Frigoríficos y Congeladores</h3>
-                    <ul class="problem-list" aria-label="Servicios de frigoríficos y congeladores">
-                        <li data-problema="fuga-agua" tabindex="0">Recarga de gas refrigerante</li>
-                        <li data-problema="fallo-electrico" tabindex="0">Reparación de compresores</li>
-                        <li data-problema="fallo-electrico" tabindex="0">Problemas de escarcha (No Frost)</li>
-                        <li data-problema="fallo-electrico" tabindex="0">Fallos en el termostato digital</li>
-                    </ul>
-                    <div class="card-cta" aria-hidden="true">Solicitar este servicio <i data-lucide="arrow-right"></i></div>
-                </div>
-                <div class="problem-card" data-servicio="Electrodomésticos" data-sub="Hornos y Vitrocerámicas">
-                    <div class="problem-card-icon" aria-hidden="true"><i data-lucide="flame"></i></div>
-                    <h3>Hornos y Vitrocerámicas</h3>
-                    <ul class="problem-list" aria-label="Servicios de hornos y vitrocerámicas">
-                        <li data-problema="fallo-electrico" tabindex="0">Sustitución de resistencias</li>
-                        <li data-problema="fallo-electrico" tabindex="0">Reparación de selectores de potencia</li>
-                        <li data-problema="fallo-electrico" tabindex="0">Vidrios rotos o dañados</li>
-                        <li data-problema="fallo-electrico" tabindex="0">Sistemas de inducción</li>
-                    </ul>
-                    <div class="card-cta" aria-hidden="true">Solicitar este servicio <i data-lucide="arrow-right"></i></div>
-                </div>
-            </div>
+            <div class="problems-grid" id="problems-grid"></div>
         </div>
     </section>
 </main>
@@ -637,6 +603,7 @@
     </div>
 </footer>
 
+<script src="config.js"></script>
 <script>
 (function() {
     var modal      = document.getElementById('contact-modal');
@@ -644,6 +611,8 @@
     var serviceTag = document.getElementById('modal-service-tag');
     var hiddenSub  = document.getElementById('modal-hidden-sub');
     var selectProb = document.getElementById('modal-problema');
+
+    function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
     function openModal(servicio, sub, detalle, problema) {
         var label = servicio + ' · ' + sub;
@@ -704,6 +673,61 @@
                 alert('Error al enviar. Por favor, inténtalo de nuevo.');
             });
     });
+
+    (function() {
+        var NOMBRE_SERVICIO = 'Electrodomésticos';
+        var grid = document.getElementById('problems-grid');
+        if (!grid) return;
+        var apiUrl = (typeof AVANTSERVICE_CONFIG !== 'undefined') ? AVANTSERVICE_CONFIG.API_SERVICIOS : 'http://localhost:3000/api/servicios';
+
+        function buildCard(sub) {
+            var liHTML = '';
+            if (!sub.es_directo && sub.opciones && sub.opciones.length) {
+                liHTML = '<ul class="problem-list" aria-label="' + esc(sub.nombre) + '">' +
+                    sub.opciones.map(function(op) {
+                        return '<li data-problema="' + esc(op.tipo_problema) + '" tabindex="0">' + esc(op.texto) + '</li>';
+                    }).join('') + '</ul>';
+            }
+            return '<div class="problem-card"' +
+                ' data-servicio="' + esc(NOMBRE_SERVICIO) + '"' +
+                ' data-sub="' + esc(sub.nombre) + '"' +
+                (sub.es_directo ? ' data-directo="1"' : '') + '>' +
+                '<div class="problem-card-icon" aria-hidden="true"><i data-lucide="' + esc(sub.icono || 'wrench') + '"></i></div>' +
+                '<h3>' + esc(sub.nombre) + '</h3>' +
+                liHTML +
+                '<div class="card-cta" aria-hidden="true">Solicitar este servicio <i data-lucide="arrow-right"></i></div>' +
+                '</div>';
+        }
+
+        function initCards() {
+            grid.querySelectorAll('.problem-list li').forEach(function(li) {
+                li.addEventListener('click', function() {
+                    var card = li.closest('.problem-card');
+                    openModal(card.dataset.servicio, card.dataset.sub, li.textContent.trim(), li.dataset.problema);
+                });
+                li.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); li.click(); }
+                });
+            });
+            grid.querySelectorAll('.problem-card[data-directo]').forEach(function(card) {
+                card.style.cursor = 'pointer';
+                card.addEventListener('click', function() {
+                    openModal(card.dataset.servicio, card.dataset.sub, '', '');
+                });
+            });
+        }
+
+        fetch(apiUrl)
+            .then(function(r) { return r.json(); })
+            .then(function(servicios) {
+                var srv = servicios.find(function(s) { return s.nombre === NOMBRE_SERVICIO; });
+                if (!srv || !srv.subservicios || !srv.subservicios.length) return;
+                grid.innerHTML = srv.subservicios.map(buildCard).join('');
+                lucide.createIcons({ nodes: [grid] });
+                initCards();
+            })
+            .catch(function() {});
+    })();
 })();
 </script>
 <script src="script.js"></script>

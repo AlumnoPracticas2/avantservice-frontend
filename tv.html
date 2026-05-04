@@ -476,41 +476,7 @@
                 </div>
                 <p class="section-hint">Haz clic en cualquier avería para pedir visita técnica</p>
             </div>
-            <div class="problems-grid">
-                <div class="problem-card" data-servicio="Televisores" data-sub="Problemas de Imagen">
-                    <div class="problem-card-icon" aria-hidden="true"><i data-lucide="monitor"></i></div>
-                    <h3>Problemas de Imagen</h3>
-                    <ul class="problem-list" aria-label="Problemas de imagen en televisores">
-                        <li data-problema="fallo-electrico" tabindex="0">Pantalla negra con sonido</li>
-                        <li data-problema="fallo-electrico" tabindex="0">Líneas verticales u horizontales</li>
-                        <li data-problema="fallo-electrico" tabindex="0">Falta de brillo (backlight)</li>
-                        <li data-problema="fallo-electrico" tabindex="0">Colores distorsionados o manchas</li>
-                    </ul>
-                    <div class="card-cta" aria-hidden="true">Solicitar este servicio <i data-lucide="arrow-right"></i></div>
-                </div>
-                <div class="problem-card" data-servicio="Televisores" data-sub="Problemas de Encendido">
-                    <div class="problem-card-icon" aria-hidden="true"><i data-lucide="zap"></i></div>
-                    <h3>Problemas de Encendido</h3>
-                    <ul class="problem-list" aria-label="Problemas de encendido en televisores">
-                        <li data-problema="fallo-electrico" tabindex="0">El televisor no enciende</li>
-                        <li data-problema="fallo-electrico" tabindex="0">LED de standby parpadea</li>
-                        <li data-problema="fallo-electrico" tabindex="0">Se apaga solo repentinamente</li>
-                        <li data-problema="fallo-electrico" tabindex="0">Fallo en fuente de alimentación</li>
-                    </ul>
-                    <div class="card-cta" aria-hidden="true">Solicitar este servicio <i data-lucide="arrow-right"></i></div>
-                </div>
-                <div class="problem-card" data-servicio="Televisores" data-sub="Software y Conectividad">
-                    <div class="problem-card-icon" aria-hidden="true"><i data-lucide="wifi"></i></div>
-                    <h3>Software y Conectividad</h3>
-                    <ul class="problem-list" aria-label="Problemas de software y conectividad en televisores">
-                        <li data-problema="error-software" tabindex="0">Actualización de firmware fallida</li>
-                        <li data-problema="error-software" tabindex="0">Wi-Fi que no conecta</li>
-                        <li data-problema="error-software" tabindex="0">Apps que no cargan (Netflix, YouTube…)</li>
-                        <li data-problema="error-software" tabindex="0">Errores del sistema Smart TV</li>
-                    </ul>
-                    <div class="card-cta" aria-hidden="true">Solicitar este servicio <i data-lucide="arrow-right"></i></div>
-                </div>
-            </div>
+            <div class="problems-grid" id="problems-grid"></div>
         </div>
     </section>
 </main>
@@ -722,6 +688,61 @@
 
     function showError(el, msg) { if (el) { el.textContent = msg; el.style.display = 'block'; } }
     function hideError(el) { if (el) { el.style.display = 'none'; el.textContent = ''; } }
+
+    (function() {
+        var NOMBRE_SERVICIO = 'Televisores';
+        var grid = document.getElementById('problems-grid');
+        if (!grid) return;
+        var apiUrl = (typeof AVANTSERVICE_CONFIG !== 'undefined') ? AVANTSERVICE_CONFIG.API_SERVICIOS : 'http://localhost:3000/api/servicios';
+
+        function buildCard(sub) {
+            var liHTML = '';
+            if (!sub.es_directo && sub.opciones && sub.opciones.length) {
+                liHTML = '<ul class="problem-list" aria-label="' + esc(sub.nombre) + '">' +
+                    sub.opciones.map(function(op) {
+                        return '<li data-problema="' + esc(op.tipo_problema) + '" tabindex="0">' + esc(op.texto) + '</li>';
+                    }).join('') + '</ul>';
+            }
+            return '<div class="problem-card"' +
+                ' data-servicio="' + esc(NOMBRE_SERVICIO) + '"' +
+                ' data-sub="' + esc(sub.nombre) + '"' +
+                (sub.es_directo ? ' data-directo="1"' : '') + '>' +
+                '<div class="problem-card-icon" aria-hidden="true"><i data-lucide="' + esc(sub.icono || 'wrench') + '"></i></div>' +
+                '<h3>' + esc(sub.nombre) + '</h3>' +
+                liHTML +
+                '<div class="card-cta" aria-hidden="true">Solicitar este servicio <i data-lucide="arrow-right"></i></div>' +
+                '</div>';
+        }
+
+        function initCards() {
+            grid.querySelectorAll('.problem-list li').forEach(function(li) {
+                li.addEventListener('click', function() {
+                    var card = li.closest('.problem-card');
+                    openModal(card.dataset.servicio, card.dataset.sub, li.textContent.trim(), li.dataset.problema);
+                });
+                li.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); li.click(); }
+                });
+            });
+            grid.querySelectorAll('.problem-card[data-directo]').forEach(function(card) {
+                card.style.cursor = 'pointer';
+                card.addEventListener('click', function() {
+                    openModal(card.dataset.servicio, card.dataset.sub, '', '');
+                });
+            });
+        }
+
+        fetch(apiUrl)
+            .then(function(r) { return r.json(); })
+            .then(function(servicios) {
+                var srv = servicios.find(function(s) { return s.nombre === NOMBRE_SERVICIO; });
+                if (!srv || !srv.subservicios || !srv.subservicios.length) return;
+                grid.innerHTML = srv.subservicios.map(buildCard).join('');
+                lucide.createIcons({ nodes: [grid] });
+                initCards();
+            })
+            .catch(function() {});
+    })();
 })();
 </script>
 <script>var h=document.querySelector('.hero-service');if(h)h.style.setProperty('--hero-bg','url("img/tv.jpg")');</script>
