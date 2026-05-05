@@ -401,7 +401,73 @@
             margin-top: 20px;
         }
 
-        /* ── AVANTFIX BANNER ─────────────────────────────────────────────── */
+        /* ── AVANTFIX CARD (grid) ───────────────────────────────────────── */
+        .avantfix-card {
+            grid-column: 1 / -1;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 22px 28px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, rgba(191,95,255,0.1), rgba(0,240,255,0.06));
+            border: 1px solid rgba(0,240,255,0.3);
+            text-decoration: none;
+            color: inherit;
+            transition: border-color 0.2s, background 0.2s;
+            margin-top: 4px;
+        }
+        .avantfix-card:hover {
+            border-color: rgba(0,240,255,0.55);
+            background: linear-gradient(135deg, rgba(191,95,255,0.15), rgba(0,240,255,0.1));
+        }
+        .avantfix-card-icon {
+            font-size: 2.2rem;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+        }
+        .avantfix-card-icon svg { width: 36px; height: 36px; stroke: #00f0ff; }
+        .avantfix-card-body { flex: 1; }
+        .avantfix-card-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 6px;
+        }
+        .avantfix-card-name {
+            background: linear-gradient(90deg, #bf5fff, #00f0ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+            font-size: 1.05rem;
+        }
+        .avantfix-card-badge {
+            font-size: 0.58rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--acc-cyan);
+            border: 1px solid rgba(0,240,255,0.3);
+            background: rgba(0,240,255,0.08);
+            padding: 2px 9px;
+            border-radius: 20px;
+        }
+        .avantfix-card-desc {
+            color: var(--text-secondary);
+            font-size: 0.82rem;
+            line-height: 1.55;
+            margin: 0;
+        }
+        .avantfix-card-arrow {
+            color: var(--acc-cyan);
+            font-size: 1.2rem;
+            flex-shrink: 0;
+            transition: transform 0.2s;
+        }
+        .avantfix-card:hover .avantfix-card-arrow { transform: translateX(4px); }
+
+        /* ── AVANTFIX BANNER (modal) ────────────────────────────────────── */
         .avantfix-banner {
             display: flex;
             align-items: center;
@@ -414,50 +480,15 @@
             color: inherit;
             transition: background 0.2s, border-color 0.2s;
         }
-
         .avantfix-banner:hover {
             background: rgba(0,240,255,0.07);
             border-color: rgba(0,240,255,0.4);
         }
-
-        .avantfix-banner-icon {
-            font-size: 1.4rem;
-            flex-shrink: 0;
-            line-height: 1;
-        }
-
-        .avantfix-banner-text {
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-            flex: 1;
-        }
-
-        .avantfix-banner-title {
-            font-size: 0.85rem;
-            font-weight: 700;
-            color: var(--text-primary);
-        }
-
-        .avantfix-banner-sub {
-            font-size: 0.76rem;
-            color: var(--text-secondary);
-            line-height: 1.4;
-        }
-
-        .avantfix-banner-arrow {
-            font-size: 1rem;
-            color: var(--acc-cyan);
-            font-weight: 700;
-            flex-shrink: 0;
-            transition: transform 0.2s;
-        }
-
-        .avantfix-banner:hover .avantfix-banner-arrow {
-            transform: translateX(4px);
-        }
-
-        /* overrides moved to light-mode block below */
+        .avantfix-banner-icon { font-size: 1.4rem; flex-shrink: 0; line-height: 1; }
+        .avantfix-banner-text { display: flex; flex-direction: column; gap: 2px; flex: 1; }
+        .avantfix-banner-sub  { font-size: 0.76rem; color: var(--text-secondary); line-height: 1.4; }
+        .avantfix-banner-arrow { font-size: 1rem; color: var(--acc-cyan); font-weight: 700; flex-shrink: 0; transition: transform 0.2s; }
+        .avantfix-banner:hover .avantfix-banner-arrow { transform: translateX(4px); }
 
         /* ── BLOGS RECIENTES ─────────────────────────────────────────────── */
         .recent-blog-section {
@@ -744,6 +775,22 @@
             background: rgba(255,170,0,0.07);
             border-color: rgba(255,170,0,0.2);
         }
+        [data-theme="light"] .avantfix-card {
+            background: linear-gradient(135deg, rgba(255,170,0,0.07), rgba(220,38,38,0.04));
+            border-color: rgba(255,170,0,0.3);
+        }
+        [data-theme="light"] .avantfix-card:hover {
+            border-color: rgba(255,170,0,0.55);
+            background: linear-gradient(135deg, rgba(255,170,0,0.12), rgba(220,38,38,0.08));
+        }
+        [data-theme="light"] .avantfix-card-name {
+            background: linear-gradient(90deg, #ffaa00, #dc2626);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        [data-theme="light"] .avantfix-card-badge { color: #ffaa00; border-color: rgba(255,170,0,0.3); background: rgba(255,170,0,0.08); }
+        [data-theme="light"] .avantfix-card-arrow { color: #ffaa00; }
         [data-theme="light"] .avantfix-banner {
             border-color: rgba(255,170,0,0.25);
             background: rgba(255,170,0,0.04);
@@ -751,20 +798,6 @@
         [data-theme="light"] .avantfix-banner:hover {
             background: rgba(255,170,0,0.08);
             border-color: rgba(255,170,0,0.45);
-        }
-        .avantfix-banner-title {
-            background: linear-gradient(90deg, #00f0ff, #0057ff);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            color: transparent;
-        }
-        [data-theme="light"] .avantfix-banner-title {
-            background: linear-gradient(90deg, #ffaa00, #dc2626);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            color: transparent;
         }
         [data-theme="light"] .avantfix-hero-link {
             background: linear-gradient(90deg, #ffaa00, #dc2626);
@@ -867,6 +900,19 @@
     <h2>Nuestros Servicios</h2>
     <div class="service-container" id="service-container">
         <div style="grid-column:1/-1;text-align:center;color:var(--text-secondary);padding:40px 0;">Cargando servicios…</div>
+    </div>
+    <div class="service-container" style="margin-top:0;padding-top:0;">
+        <a href="reparalo.html" class="avantfix-card">
+            <div class="avantfix-card-icon"><i data-lucide="wrench"></i></div>
+            <div class="avantfix-card-body">
+                <div class="avantfix-card-title">
+                    <span class="avantfix-card-name">AvantFix</span>
+                    <span class="avantfix-card-badge">DIY</span>
+                </div>
+                <p class="avantfix-card-desc">¿Prefieres arreglarlo tú mismo? Te orientamos con instrucciones técnicas paso a paso según el nivel de dificultad de tu avería.</p>
+            </div>
+            <span class="avantfix-card-arrow">→</span>
+        </a>
     </div>
 </section>
 

@@ -263,6 +263,57 @@
         .confirm-banner-icon  { font-size: 1.5rem; flex-shrink: 0; }
         .confirm-banner-title { font-weight: 700; color: #6ee7b7; font-size: 0.95rem; }
         .confirm-banner-text  { color: var(--text-secondary); font-size: 0.83rem; line-height: 1.55; display: block; margin-top: 4px; }
+
+        .diy-steps {
+            display: flex;
+            gap: 0;
+            margin-bottom: 36px;
+            position: relative;
+        }
+        .diy-steps::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: calc(16.66% + 4px);
+            right: calc(16.66% + 4px);
+            height: 1px;
+            background: linear-gradient(90deg, rgba(0,240,255,0.35), rgba(191,95,255,0.35));
+        }
+        [data-theme="light"] .diy-steps::before {
+            background: linear-gradient(90deg, rgba(255,170,0,0.35), rgba(220,38,38,0.35));
+        }
+        .diy-step {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+        .diy-step-num {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--bg-primary);
+            border: 2px solid rgba(0,240,255,0.45);
+            color: var(--acc-cyan);
+            font-weight: 800;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        [data-theme="light"] .diy-step-num {
+            border-color: rgba(255,170,0,0.5);
+            color: #ffaa00;
+            background: #fff;
+        }
+        .diy-step-title { color: var(--text-primary); font-weight: 600; font-size: 0.83rem; }
+        .diy-step-sub   { color: var(--text-secondary); font-size: 0.73rem; line-height: 1.45; margin-top: -4px; }
+        .diy-steps-divider { border: none; border-top: 1px solid var(--glass-border); margin: 0 0 28px; }
     </style>
     <script>var t=localStorage.getItem("avantservice-theme");if(t==="light")document.documentElement.setAttribute("data-theme","light");</script>
 </head>
@@ -291,9 +342,27 @@
 
 <div class="diy-page">
 
-    <h1 class="diy-page-title"><span class="avant">AvantFix</span><span class="diy-title-badge">Gratis</span></h1>
-    <p class="diy-page-subtitle">Selecciona el nivel de dificultad de tu problema y te orientamos. Puedes enviarnos tu consulta directamente desde aquí.</p>
+    <h1 class="diy-page-title"><span class="avant">AvantFix</span><span class="diy-title-badge">DIY</span></h1>
+    <p class="diy-page-subtitle">Orientación técnica para que puedas reparar tú mismo tu electrodoméstico, caldera o televisor. Selecciona el nivel de dificultad y cuéntanos qué le pasa.</p>
 
+    <div class="diy-steps">
+        <div class="diy-step">
+            <div class="diy-step-num">1</div>
+            <span class="diy-step-title">Elige el nivel</span>
+            <span class="diy-step-sub">Fácil, medio<br>o difícil</span>
+        </div>
+        <div class="diy-step">
+            <div class="diy-step-num">2</div>
+            <span class="diy-step-title">Describe la avería</span>
+            <span class="diy-step-sub">Cuéntanos<br>qué le pasa</span>
+        </div>
+        <div class="diy-step">
+            <div class="diy-step-num">3</div>
+            <span class="diy-step-title">Recibe orientación</span>
+            <span class="diy-step-sub">Por email<br>en menos de 48 h</span>
+        </div>
+    </div>
+    <hr class="diy-steps-divider">
 
     <div class="diy-diff-grid">
         <button class="diy-diff-btn active" data-diff="facil">
