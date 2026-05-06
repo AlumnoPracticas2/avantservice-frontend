@@ -1,6 +1,6 @@
 // Configuración de la API — cambia BASE_URL al desplegar en producción
 var AVANTSERVICE_CONFIG = (function () {
-    var isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+    var isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1' || location.hostname === '127.0.0.1';
     var BASE_URL = isLocal ? 'http://localhost:3000' : 'https://avantelite-backend-production.up.railway.app';
     return {
 
