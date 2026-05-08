@@ -71,11 +71,6 @@
             background: rgba(255,170,0,0.06);
         }
 
-        [data-theme="light"] #legal-gate {
-            border-color: rgba(255,170,0,0.2);
-            background: rgba(255,170,0,0.03);
-        }
-
         [data-theme="light"] .diy-send-btn {
             background: linear-gradient(135deg, #dc2626, #ffaa00);
         }
@@ -423,7 +418,11 @@
             <p><strong>Reparaciones de nivel Difícil</strong> — Las reparaciones clasificadas como nivel <strong class="text-danger-light">Difícil</strong> están recomendadas exclusivamente para técnicos o profesionales del sector. AvantService desaconseja expresamente su realización por parte de usuarios sin formación específica, pudiendo implicar riesgos eléctricos, mecánicos o de seguridad, así como la anulación de la garantía del fabricante.</p>
             <p><strong>Cobertura y tarifas</strong> — AvantService no cubre fallos preexistentes del producto ni daños ocasionados por un uso indebido. La tarifa indicada corresponde únicamente al servicio de asesoramiento o visita técnica, y no incluye piezas, materiales ni trabajos adicionales no presupuestados.</p>
             <p><strong>Requisito de edad</strong> — El uso de este servicio está reservado a personas mayores de 18 años. Al enviar una consulta, el usuario declara ser mayor de edad o contar con el consentimiento expreso de su tutor legal. AvantService se reserva el derecho de cancelar cualquier solicitud cuando existan indicios razonables de que el usuario es menor de edad sin la supervisión de un adulto responsable.</p>
-            <p>Para más información consulta el <a href="legal.html" id="legal-link" style="color:var(--acc-cyan);text-decoration:underline;">Aviso Legal completo</a>. <strong style="color:var(--acc-cyan);font-size:0.82rem;">Debes leerlo para poder aceptar.</strong></p>
+            <p>Para más información consulta el <a href="aviso-legal.html" id="legal-link" target="_blank" rel="noopener" style="color:var(--acc-cyan);text-decoration:underline;">Aviso Legal completo</a>. <strong style="color:var(--acc-cyan);font-size:0.82rem;">Debes leerlo para poder aceptar.</strong></p>
+            <label id="legal-accept-label" class="diy-accept locked" style="margin-top:12px;margin-bottom:4px;">
+                <input type="checkbox" id="legal-accept-cb" disabled>
+                <span id="legal-accept-text">He leído y acepto el Aviso Legal — <em style="font-size:0.8rem;">visita el enlace de arriba primero</em></span>
+            </label>
         </div>
     </div>
 
@@ -436,11 +435,6 @@
             <label>Descripción del problema y producto/servicio</label>
             <textarea id="diy-mensaje" rows="4" placeholder="Explícanos brevemente qué le ocurre..."></textarea>
         </div>
-    </div>
-
-    <div id="legal-gate" style="border:1px solid rgba(0,240,255,0.2);border-radius:12px;padding:16px 20px;background:rgba(0,240,255,0.03);display:flex;align-items:center;gap:14px;font-size:0.85rem;line-height:1.5;">
-        <i data-lucide="shield-alert" style="width:22px;height:22px;stroke:var(--acc-cyan);flex-shrink:0;"></i>
-        <span>Para enviar tu consulta debes leer y aceptar el <a href="legal.html" style="color:var(--acc-cyan);font-weight:700;text-decoration:underline;">Aviso Legal completo</a>. El botón de envío se desbloqueará una vez lo hayas aceptado.</span>
     </div>
 
     <p id="diy-error-msg" style="display:none;color:#f87171;font-size:0.85rem;margin-bottom:8px;"></p>
@@ -459,20 +453,45 @@
 </div>
 
 <script>
-var activeDiff = 'facil';
-var sendBtn    = document.getElementById('diy-send-btn');
-var legalGate  = document.getElementById('legal-gate');
+var activeDiff      = 'facil';
+var sendBtn         = document.getElementById('diy-send-btn');
+var legalLink       = document.getElementById('legal-link');
+var legalCb         = document.getElementById('legal-accept-cb');
+var legalLabel      = document.getElementById('legal-accept-label');
+var legalAcceptText = document.getElementById('legal-accept-text');
+
+function unlockCheckbox() {
+    legalCb.disabled = false;
+    legalLabel.classList.remove('locked');
+    legalAcceptText.innerHTML = 'He leído y acepto el <a href="aviso-legal.html" target="_blank" rel="noopener" style="color:var(--acc-cyan);text-decoration:underline;">Aviso Legal</a>';
+}
 
 function checkLegalAccepted() {
     if (sessionStorage.getItem('legal-accepted') === '1') {
+        unlockCheckbox();
+        legalCb.checked = true;
         sendBtn.setAttribute('aria-disabled', 'false');
-        if (legalGate) legalGate.style.display = 'none';
-    } else {
-        sendBtn.setAttribute('aria-disabled', 'true');
+    } else if (sessionStorage.getItem('legal-visited') === '1') {
+        unlockCheckbox();
     }
 }
 
 checkLegalAccepted();
+
+legalLink.addEventListener('click', function() {
+    sessionStorage.setItem('legal-visited', '1');
+    setTimeout(unlockCheckbox, 300);
+});
+
+legalCb.addEventListener('change', function() {
+    if (this.checked) {
+        sessionStorage.setItem('legal-accepted', '1');
+        sendBtn.setAttribute('aria-disabled', 'false');
+    } else {
+        sessionStorage.removeItem('legal-accepted');
+        sendBtn.setAttribute('aria-disabled', 'true');
+    }
+});
 
 document.querySelectorAll('.diy-diff-btn').forEach(function(btn) {
     btn.addEventListener('click', function() {
